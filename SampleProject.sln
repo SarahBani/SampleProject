@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0B4A6ADB-10C5-4DA4-AB28-8F145E874108}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DependencyInjection", "DependencyInjection", "{5CB6D724-3798-4132-9634-4E460842529E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DependencyInversion", "DependencyInversion", "{5CB6D724-3798-4132-9634-4E460842529E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserInterface", "UserInterface", "{35399A50-D138-418B-8C7F-7A0B8FE2866B}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "UserInterface\Web
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{3AC6E43E-83E8-4159-9883-1C3C2E951ACC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjection.Injector", "DependencyInjection\DependencyInjection.Injector\DependencyInjection.Injector.csproj", "{B372421B-7F40-42EA-B283-3164531E6668}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInversion.Injector", "DependencyInjection\DependencyInjection.Injector\DependencyInversion.Injector.csproj", "{B372421B-7F40-42EA-B283-3164531E6668}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication", "UserInterface\WebApplication\WebApplication.csproj", "{13C1A816-D321-493F-8014-8FF91D07C277}"
 EndProject
