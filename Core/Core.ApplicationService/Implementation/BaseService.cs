@@ -44,7 +44,7 @@ namespace Core.ApplicationService.Implementation
 
         #region Constructors
 
-        protected BaseService(EntityService entityService)
+        protected BaseService(IEntityService entityService)
             : base(entityService)
         {
         }
@@ -52,14 +52,7 @@ namespace Core.ApplicationService.Implementation
         #endregion /Constructors
 
         #region Methods
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        protected async Task<TransactionResult> UpdateAsync()
-        {
-            BeginTransaction();
-            return await CommitTransactionAsync();
-        }
-
+        
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected async Task<TransactionResult> GetTransactionResultAsync(Action action)
         {
@@ -99,13 +92,6 @@ namespace Core.ApplicationService.Implementation
             var method = new StackTrace(new StackFrame(intSkipFrames)).GetFrame(0).GetMethod();
             return method.ReflectedType.Name + "." + method.Name;
         }
-
-        //static string GetActualAsyncMethodName([CallerMemberName]string name = null) => name;
-
-        //public string GetCurrentMethod([CallerMemberName] string callerName = "")
-        //{
-        //    return callerName;
-        //}
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected TransactionResult GetTransactionException(Exception exception)

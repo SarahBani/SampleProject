@@ -17,13 +17,13 @@ namespace Core.ApplicationService.Implementation
 
         protected IReadOnlyRepository<TEntity, TKey> Repository { get; private set; }
 
-        protected EntityService EntityService { get; set; }
+        protected IEntityService EntityService { get; set; }
 
         #endregion /Properties
 
         #region Constructors
 
-        public BaseReadOnlyService(EntityService entityService)
+        public BaseReadOnlyService(IEntityService entityService)
         {
             this.EntityService = entityService;
             this.Repository = this.EntityService.GetRepository<TEntity, TKey>();

@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace Core.ApplicationService
 {
-    public class EntityService
+    public class EntityService : IEntityService
     {
 
         #region Properties
 
-        public IUnitOfWork UnitOfWork { get; set; }
+        public IUnitOfWork UnitOfWork { get; private set; }
 
         #region Repositories
 
-        public IBankRepository BankRepository { get; set; }
+        public IBankRepository BankRepository { get; private set; }
 
-        public IBranchRepository BranchRepository { get; set; }
+        public IBranchRepository BranchRepository { get; private set; }
 
         #endregion /Repositories
 

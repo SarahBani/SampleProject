@@ -6,7 +6,7 @@ namespace Infrastructure.DataBase.Repository
 {
     public class BankRepository : Repository<Bank, int>, IBankRepository
     {
-        public BankRepository(SampleDataBaseContext  dbContext)
+        public BankRepository(SampleDataBaseContext dbContext)
             : base(dbContext)
         {
 

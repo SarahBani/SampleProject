@@ -7,8 +7,6 @@ namespace Core.DomainServices
     public interface IUnitOfWork : IDisposable
     {
 
-        SampleDataBaseContext SampleDBContext { get; set; }
-
         string GetTransactionName();
 
         void BeginTransaction(string transactionName);

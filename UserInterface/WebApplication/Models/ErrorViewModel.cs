@@ -1,6 +1,4 @@
-using System;
-
-namespace SampleProject.Models
+namespace UserInterface.WebApplication.Models
 {
     public class ErrorViewModel
     {

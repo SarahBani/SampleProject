@@ -17,7 +17,7 @@ namespace Infrastructure.DataBase.Repositoy
 
         #region Constructors
 
-        public Repository(SampleDataBaseContext  dbContext)
+        public Repository(SampleDataBaseContext dbContext)
             : base(dbContext)
         {
         }

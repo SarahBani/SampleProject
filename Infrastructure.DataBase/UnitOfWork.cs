@@ -11,9 +11,9 @@ namespace Infrastructure.DataBase
 
         #region Properties
 
-        public string TransactionName { get; private set; }
+        private string _transactionName;
 
-        public SampleDataBaseContext  SampleDBContext { get; set; }
+        private SampleDataBaseContext _dbContext;
 
         #endregion /Properties
 
@@ -21,7 +21,7 @@ namespace Infrastructure.DataBase
 
         public UnitOfWork(SampleDataBaseContext  dbContext)
         {
-            this.SampleDBContext = dbContext;
+            this._dbContext = dbContext;
         }
 
         #endregion /Constructors
@@ -39,25 +39,25 @@ namespace Infrastructure.DataBase
 
         public string GetTransactionName()
         {
-            return this.TransactionName;
+            return this._transactionName;
         }
 
         public void BeginTransaction(string transactionName)
         {
-            if (string.IsNullOrEmpty(this.TransactionName))
+            if (string.IsNullOrEmpty(this._transactionName))
             {
-                this.TransactionName = transactionName;
+                this._transactionName = transactionName;
             }
         }
 
         public async Task Commit()
         {
-            if (string.IsNullOrEmpty(this.TransactionName))
+            if (string.IsNullOrEmpty(this._transactionName))
             {
                 throw new CustomException(ExceptionKey.NoActiveTransaction);
             }
-            await this.SampleDBContext.SaveChangesAsync();
-            this.TransactionName = string.Empty;
+            await this._dbContext.SaveChangesAsync();
+            this._transactionName = string.Empty;
         }
 
         public void RollBack()
@@ -66,9 +66,9 @@ namespace Infrastructure.DataBase
 
         public void Dispose()
         {
-            if (this.SampleDBContext != null)
+            if (this._dbContext != null)
             {
-                this.SampleDBContext.Dispose();
+                this._dbContext.Dispose();
             }
             GC.SuppressFinalize(this);
         }
