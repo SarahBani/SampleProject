@@ -1,5 +1,6 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
+using Core.DomainServices;
 using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Implementation
@@ -25,6 +26,11 @@ namespace Core.ApplicationService.Implementation
         public async Task<int> GetCountAsync()
         {
             return await base.GetCountAsync();
+        }
+
+        public override async Task<TransactionResult> InsertAsync(Bank bank)
+        {
+            return await base.InsertAsync(bank);
         }
 
         #endregion /Methods

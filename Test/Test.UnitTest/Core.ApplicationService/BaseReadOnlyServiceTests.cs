@@ -10,21 +10,22 @@ using System.Linq;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
-    public abstract class BaseReadOnlyServiceTests<TEntity, TKey>
+    public abstract class BaseReadOnlyServiceTests<TRepository, TEntity, TKey>
+        where TRepository : class, IReadOnlyRepository<TEntity, TKey>
         where TEntity : Entity<TKey>
     {
 
         #region Properties
 
+        protected Mock<IEntityService> EntityServiceMock { get; private set; }
+
+        protected Mock<TRepository> RepositoryMock { get; private set; }
+
+        protected BaseReadOnlyService<TEntity, TKey> Service { get; set; }
+
         protected abstract TEntity Entity { get; }
 
         protected abstract IList<TEntity> EntityList { get; }
-
-        protected BaseReadOnlyService<TEntity, TKey> Service { get; set; }
-        
-        protected Mock<IEntityService> EntityServiceMock { get; private set; }
-
-        protected Mock<IReadOnlyRepository<TEntity, TKey>> RepositoryMock { get; private set; }
 
         #endregion /Properties
 
@@ -32,14 +33,27 @@ namespace Test.UnitTest.Core.ApplicationService
 
         public BaseReadOnlyServiceTests()
         {
-            this.EntityServiceMock = new Mock<IEntityService>();
-            this.RepositoryMock = new Mock<IReadOnlyRepository<TEntity, TKey>>();
-            this.EntityServiceMock.Setup(q => q.GetRepository<TEntity, TKey>()).Returns(this.RepositoryMock.Object);
+            this.RepositoryMock = new Mock<TRepository>();
+            SetEntityServiceMock();
         }
 
         #endregion /Consructors
 
-        #region Methods
+        #region Methods    
+
+        private void SetEntityServiceMock()
+        {
+            this.EntityServiceMock = new Mock<IEntityService>();
+            this.EntityServiceMock.Setup(q => q.GetRepository<TEntity, TKey>()).Returns(this.RepositoryMock.Object);
+        }
+
+        [SetUp]
+        public abstract void Setup();
+
+        protected void SetService<T>() where T : BaseReadOnlyService<TEntity, TKey>
+        {
+            Service = (T)Activator.CreateInstance(typeof(T), this.EntityServiceMock.Object);
+        }
 
         [Test]
         public void GetByIdAsync_ReturnsOK()
@@ -98,7 +112,7 @@ namespace Test.UnitTest.Core.ApplicationService
             //Act
             var result = this.Service.GetAllAsync().Result;
 
-            // Assert
+            // Assert            
             Assert.IsInstanceOf<IList<TEntity>>(result);
             this.RepositoryMock.Verify(q => q.GetQueryableAsync()); // Verifies that Repository.GetQueryableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");

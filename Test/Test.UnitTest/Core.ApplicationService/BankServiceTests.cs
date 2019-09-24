@@ -1,12 +1,13 @@
 ﻿using Core.ApplicationService.Implementation;
 using Core.DomainModel.Entities;
+using Core.DomainServices.Repositoy;
 using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
     [TestFixture]
-    public class BankServiceTests : BaseServiceTests<Bank, int>
+    public class BankServiceTests : BaseServiceTests<IBankRepository, Bank, int>
     {
 
         #region Properties
@@ -51,9 +52,9 @@ namespace Test.UnitTest.Core.ApplicationService
         #region Methods
 
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
-            base.Service = new BankService(base.EntityServiceMock.Object);
+            base.SetService<BankService>();
         }
 
         //[Test]
