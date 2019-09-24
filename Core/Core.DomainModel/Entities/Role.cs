@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Core.DomainModel.Entities
 {
@@ -6,5 +8,13 @@ namespace Core.DomainModel.Entities
     {
         public string Description { get; set; }
 
+    }
+
+    internal class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
+    {
+        public void Configure(EntityTypeBuilder<Role> builder)
+        {
+            builder.ToTable("Role");
+        }
     }
 }

@@ -57,21 +57,6 @@ namespace Test.UnitTest.Core.ApplicationService
             base.SetService<BankService>();
         }
 
-        //[Test]
-        //public void UpdateAsync_ReturnsOK()
-        //{
-        //    // Arrange
-        //    var entity = Entity;
-
-        //    //Act
-        //    var result = this.Service.UpdateAsync(entity).Result;
-
-        //    // Assert
-        //    Assert.IsInstanceOf<TransactionResult>(result);
-        //    base.RepositoryMock.Verify(q => q.Update(It.IsAny<Bank>())); // Verifies that Repository.UpdateAsync was called
-        //    Assert.AreEqual(this.SuccessfulTransResult, result, "error in returning correct TransactionResult");
-        //}
-
         #endregion /Methods
 
     }

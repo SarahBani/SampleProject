@@ -1,16 +1,19 @@
-﻿namespace Core.DomainModel.Entities
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Core.DomainModel.Entities
 {
     public class Branch : Entity<int>, IAggregateRoot
     {
 
         #region Properties
 
-        public int BankId { get; private set; }
-        public int Code { get; private set; }
-        public string Name { get; private set; }
-        public Address Address { get; private set; }
+        public int BankId { get; set; }
+        public int Code { get; set; }
+        public string Name { get; set; }
+        public Address Address { get; set; }
 
-        public virtual Bank Bank { get; private set; }
+        public virtual Bank Bank { get; set; }
 
         #endregion /Properties
 
@@ -46,5 +49,47 @@
 
         #endregion /Methods
 
+    }
+
+    internal class BranchEntityTypeConfiguration : IEntityTypeConfiguration<Branch>
+    {
+        public void Configure(EntityTypeBuilder<Branch> builder)
+        {
+            builder.Property(q => q.Code)
+                      .IsRequired();
+
+            builder.Property(q => q.Name)
+                .IsRequired()
+                .HasMaxLength(60);
+
+            //Address value object persisted as owned entity in EF Core 2.0
+            /// By default, EF Core conventions name the database columns for the properties of the
+            /// owned entity type as EntityProperty_OwnedEntityProperty -- it didn't!!!!, maybe in the past
+            builder.OwnsOne(o => o.Address, q =>
+            {
+                q.Property(p => p.CityName)
+                    .HasColumnName("ShippingCity")
+                    .IsRequired()
+                    .HasMaxLength(60);
+                q.Property(p => p.Street)
+                    .HasColumnName("ShippingStreet")
+                    .IsRequired()
+                    .HasMaxLength(200);
+                q.Property(p => p.BlockNo)
+                    .HasColumnName("ShippingBlockNo")
+                    .IsRequired()
+                    .HasMaxLength(20);
+                q.Property(p => p.PostalCode)
+                    .HasColumnName("PostalCode")
+                    .HasMaxLength(10);
+
+                //q.ToTable("OrderAddress"); // Storing owned type in a specific table
+            });
+
+            builder.HasOne(q => q.Bank)
+                .WithMany(q => q.Branches)
+                .HasForeignKey(q => q.BankId)
+                .HasConstraintName("FK_Branch_Bank");
+        }
     }
 }
