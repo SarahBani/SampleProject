@@ -12,6 +12,11 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Properties
 
+        protected new BankService Service
+        {
+            get => base.Service as BankService;
+        }
+
         protected override Bank Entity
         {
             get => new Bank()

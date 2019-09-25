@@ -10,15 +10,17 @@ namespace Core.ApplicationService.Contracts
 
         Task<Branch> GetByIdAsync(int id);
 
-        Task<IList<Branch>> GetAllAsync();
+        Task<int> GetCountByBankIdAsync(int bankId);
 
         Task<IList<Branch>> GetListByBankIdAsync(int bankId);
-
+        
         Task<TransactionResult> InsertAsync(Branch branch);
 
         Task<TransactionResult> UpdateAsync(Branch branch);
 
         Task<TransactionResult> DeleteAsync(int id);
+
+        Task<TransactionResult> DeleteByBankIdAsync(int bankId);
 
     }
 }

@@ -18,7 +18,6 @@ namespace Test.UnitTest.Core.ApplicationService
         protected new BaseService<TEntity, TKey> Service
         {
             get => base.Service as BaseService<TEntity, TKey>;
-            set => base.Service = value;
         }
 
         #endregion /Properties

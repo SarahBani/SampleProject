@@ -52,7 +52,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         protected void SetService<T>() where T : BaseReadOnlyService<TEntity, TKey>
         {
-            Service = (T)Activator.CreateInstance(typeof(T), this.EntityServiceMock.Object);
+            this.Service = (T)Activator.CreateInstance(typeof(T), this.EntityServiceMock.Object);
         }
 
         [Test]

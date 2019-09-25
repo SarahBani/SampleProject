@@ -16,6 +16,8 @@ namespace Core.ApplicationService
 
         #region Repositories
 
+        public ICountryRepository CountryRepository { get; private set; }
+
         public IBankRepository BankRepository { get; private set; }
 
         public IBranchRepository BranchRepository { get; private set; }
@@ -23,6 +25,20 @@ namespace Core.ApplicationService
         #endregion /Repositories
 
         #region Services
+
+        private ICountryService _countryService;
+        public ICountryService CountryService
+        {
+            get
+            {
+                if (_countryService == null)
+                {
+                    _countryService = new CountryService(this);
+
+                }
+                return _countryService;
+            }
+        }
 
         private IBankService _bankService;
         public IBankService BankService
@@ -58,10 +74,12 @@ namespace Core.ApplicationService
 
         #region Constructors
 
-        public EntityService(IRepository<Bank, int> bankRepository,
-                             IRepository<Branch, int> branchRepository,
-                             IUnitOfWork unitOfWork)
+        public EntityService(IRepository<Country, short> countryRepository, 
+            IRepository<Bank, int> bankRepository,
+            IRepository<Branch, int> branchRepository,
+            IUnitOfWork unitOfWork)
         {
+            this.CountryRepository = (countryRepository as ICountryRepository);
             this.BankRepository = (bankRepository as IBankRepository);
             this.BranchRepository = (branchRepository as IBranchRepository);
 

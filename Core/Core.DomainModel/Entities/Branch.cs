@@ -19,7 +19,7 @@ namespace Core.DomainModel.Entities
 
         #region Constructors
 
-        private Branch()
+        public Branch()
         {
 
         }
