@@ -7,38 +7,38 @@ using System.Collections.Generic;
 namespace Test.UnitTest.Core.ApplicationService
 {
     [TestFixture]
-    public class BankServiceTests : BaseServiceTests<IBankRepository, Bank, int>
+    public class CountryServiceTests : BaseReadOnlyServiceTests<ICountryRepository, Country, short>
     {
 
         #region Properties
 
-        protected new BankService Service
+        protected new CountryService Service
         {
-            get => base.Service as BankService;
+            get => base.Service as CountryService;
         }
 
-        protected override Bank Entity
+        protected override Country Entity
         {
-            get => new Bank()
+            get => new Country()
             {
                 Id = 3,
-                Name = "sdgsg"
+                Name = "Iran"
             };
         }
 
-        protected override IList<Bank> EntityList
+        protected override IList<Country> EntityList
         {
-            get => new List<Bank>
+            get => new List<Country>
                 {
-                    new Bank()
+                    new Country()
                     {
                         Id = 3,
-                        Name = "sdgsg"
+                        Name = "Iran"
                     },
-                    new Bank()
+                    new Country()
                     {
                         Id = 4,
-                        Name = "hhhh"
+                        Name = "Turkey"
                     }
                 };
         }
@@ -47,7 +47,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Constructors
 
-        public BankServiceTests()
+        public CountryServiceTests()
             : base()
         {
         }
@@ -59,7 +59,7 @@ namespace Test.UnitTest.Core.ApplicationService
         [SetUp]
         public override void Setup()
         {
-            base.SetService<BankService>();
+            base.SetService<CountryService>();
         }
 
         #endregion /Methods
