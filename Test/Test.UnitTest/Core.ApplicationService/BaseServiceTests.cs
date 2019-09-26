@@ -53,7 +53,8 @@ namespace Test.UnitTest.Core.ApplicationService
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
-            base.RepositoryMock.Verify(q => q.InsertAsync(It.IsAny<TEntity>())); // Verifies that Repository.InsertAsync was called
+            base.RepositoryMock.Verify(q => q.InsertAsync(It.IsAny<TEntity>()),
+                "error in calling the correct method");  // Verifies that Repository.InsertAsync was called
             Assert.AreEqual(true, result.IsSuccessful, "error in returning correct TransactionResult");
         }
 
@@ -69,7 +70,8 @@ namespace Test.UnitTest.Core.ApplicationService
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
-            base.RepositoryMock.Verify(q => q.Update(It.IsAny<TEntity>())); // Verifies that Repository.UpdateAsync was called
+            base.RepositoryMock.Verify(q => q.Update(It.IsAny<TEntity>()),
+                "error in calling the correct method");  // Verifies that Repository.UpdateAsync was called
             Assert.AreEqual(true, result.IsSuccessful, "error in returning correct TransactionResult");
         }
 
@@ -78,14 +80,15 @@ namespace Test.UnitTest.Core.ApplicationService
         {
             // Arrange
             var entity = Entity;
-            base.RepositoryMock.Setup(q => q.Delete(It.IsAny<TKey>())).Verifiable();
+            base.RepositoryMock.Setup(q => q.Delete(entity.Id)).Verifiable();
 
             //Act
             var result = this.Service.DeleteAsync(entity.Id).Result;
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
-            base.RepositoryMock.Verify(q => q.Delete(It.IsAny<TKey>())); // Verifies that Repository.DeleteAsync was called
+            base.RepositoryMock.Verify(q => q.Delete(entity.Id),
+                "error in calling the correct method");  // Verifies that Repository.DeleteAsync was called
             Assert.AreEqual(true, result.IsSuccessful, "error in returning correct TransactionResult");
         }
 
@@ -101,7 +104,8 @@ namespace Test.UnitTest.Core.ApplicationService
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
-            base.RepositoryMock.Verify(q => q.Delete(It.IsAny<TEntity>())); // Verifies that Repository.DeleteAsync was called
+            base.RepositoryMock.Verify(q => q.Delete(It.IsAny<TEntity>()), 
+                "error in calling the correct method");  // Verifies that Repository.DeleteAsync was called
             Assert.AreEqual(true, result.IsSuccessful, "error in returning correct TransactionResult");
         }
 

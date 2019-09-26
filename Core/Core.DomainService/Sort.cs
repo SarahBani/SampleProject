@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Core.DomainServices
@@ -48,4 +49,32 @@ namespace Core.DomainServices
 
     }
 
+    //public class Sort<TSource, TKey>
+    //{
+
+    //    #region Properties
+
+    //    public Expression<Func<TSource, TKey>> SortField { get; set; }
+
+    //    public SortDirection SortDirection { get; private set; }
+
+    //    #endregion /Properties
+
+    //    #region Constructors
+
+    //    public Sort(Expression<Func<TSource, TKey>> field)
+    //    {
+    //        this.SortField = field;
+    //        this.SortDirection = SortDirection.ASC;
+    //    }
+
+    //    public Sort(Expression<Func<TSource, TKey>> field, SortDirection dir)
+    //    {
+    //        this.SortField = field;
+    //        this.SortDirection = dir;
+    //    }
+
+    //    #endregion /Constructors
+
+    //}
 }

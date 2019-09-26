@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq.Expressions;
 using Core.DomainModel.Settings;
+using System.Linq;
 
 namespace Core.DomainServices
 {
@@ -24,6 +25,19 @@ namespace Core.DomainServices
         public static string GetApplicationSetting(IConfiguration config, string key)
         {
             return config.GetSection(key).Value;
+        }
+
+        public static IQueryable<T> SetOrderExpression<T, K>(IQueryable<T> query, Sort sort)
+        {
+            var expression = GetRelatedPropertyExpression<T, K>(sort.SortField);
+            if (sort.SortDirection == SortDirection.ASC)
+            {
+                return query.OrderBy(expression);
+            }
+            else
+            {
+               return query.OrderByDescending(expression);
+            }
         }
 
         public static Expression<Func<T, K>> GetRelatedPropertyExpression<T, K>(string property)

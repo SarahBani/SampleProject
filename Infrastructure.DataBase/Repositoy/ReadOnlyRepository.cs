@@ -15,13 +15,13 @@ namespace Infrastructure.DataBase.Repositoy
 
         #region Properties
 
-        protected readonly SampleDataBaseContext  MyDBContext;
+        protected readonly SampleDataBaseContext MyDBContext;
 
         #endregion /Properties
 
         #region Constructors
 
-        public ReadOnlyRepository(SampleDataBaseContext  dbContext)
+        public ReadOnlyRepository(SampleDataBaseContext dbContext)
         {
             this.MyDBContext = dbContext;
         }
@@ -47,8 +47,7 @@ namespace Infrastructure.DataBase.Repositoy
 
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-            return await Task.Run(() => this.MyDBContext.Set<TEntity>()
-                .Count(filter));
+            return await Task.Run(() => this.MyDBContext.Set<TEntity>().Count(filter));
         }
 
         public virtual TEntity GetSingle(Expression<Func<TEntity, bool>> filter)

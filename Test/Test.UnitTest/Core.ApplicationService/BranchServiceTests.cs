@@ -85,13 +85,15 @@ namespace Test.UnitTest.Core.ApplicationService
             // Arrange
             int count = 3;
             int bankId = 5;
-            base.RepositoryMock.Setup(x => x.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())).ReturnsAsync(count);
+            var expression = It.IsAny<Expression<Func<Branch, bool>>>();
+            base.RepositoryMock.Setup(x => x.GetCountAsync(expression)).ReturnsAsync(count);
 
             //Act
             var result = this.Service.GetCountByBankIdAsync(bankId).Result;
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())); // Verifies that Repository.GetCountAsync was called
+            base.RepositoryMock.Verify(q => q.GetCountAsync(expression),
+                "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
@@ -101,7 +103,8 @@ namespace Test.UnitTest.Core.ApplicationService
             // Arrange
             int count = 0;
             int bankId = -1;
-            base.RepositoryMock.Setup(x => x.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())).ReturnsAsync(count);
+            var expression = It.IsAny<Expression<Func<Branch, bool>>>();
+            base.RepositoryMock.Setup(x => x.GetCountAsync(expression)).ReturnsAsync(count);
 
             //Act
             var result = this.Service.GetCountByBankIdAsync(bankId).Result;
@@ -109,7 +112,8 @@ namespace Test.UnitTest.Core.ApplicationService
             // comparing expressions
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())); // Verifies that Repository.GetCountAsync was called
+            base.RepositoryMock.Verify(q => q.GetCountAsync(expression), 
+                "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
@@ -118,14 +122,16 @@ namespace Test.UnitTest.Core.ApplicationService
             // Arrange
             var entityList = EntityList;
             int bankId = 5;
-            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
+            var expression = It.IsAny<Expression<Func<Branch, bool>>>();
+            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(expression, null, null))
                 .ReturnsAsync(entityList);
 
             //Act
             var result = this.Service.GetListByBankIdAsync(bankId).Result;
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null)); // Verifies that Repository.GetEnumerableAsync was called
+            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null), 
+                "error in calling the correct method");  // Verifies that Repository.GetEnumerableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }
 
@@ -134,14 +140,16 @@ namespace Test.UnitTest.Core.ApplicationService
             // Arrange
             var entityList = new List<Branch>();
             int bankId = -1;
-            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
+            var expression = It.IsAny<Expression<Func<Branch, bool>>>();
+            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(expression, null, null))
                 .ReturnsAsync(entityList);
 
             //Act
             var result = this.Service.GetListByBankIdAsync(bankId).Result;
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null)); // Verifies that Repository.GetEnumerableAsync was called
+            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null),
+                "error in calling the correct method");  // Verifies that Repository.GetEnumerableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }
 

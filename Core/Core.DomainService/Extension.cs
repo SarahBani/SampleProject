@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Core.DomainServices
 {
@@ -10,21 +11,13 @@ namespace Core.DomainServices
 
         public static IQueryable<TEntity> SetOrder<TEntity>(this IQueryable<TEntity> query, IList<Sort> sorts)
         {
-            if (sorts != null && sorts.Count() > 0)
+            foreach (var sort in sorts)
             {
-                foreach (var sort in sorts)
-                {
-                    var propertyExpression = Utility.GetRelatedPropertyExpression<TEntity, TEntity>(sort.SortField);
+                var propertyType = typeof(TEntity).GetProperty(sort.SortField).PropertyType;
 
-                    if (sort.SortDirection == SortDirection.ASC)
-                    {
-                        query = query.OrderBy(propertyExpression);
-                    }
-                    else
-                    {
-                        query = query.OrderByDescending(propertyExpression);
-                    }
-                }
+                var method = typeof(Utility).GetMethod("SetOrderExpression");
+                var genericMethod = method.MakeGenericMethod(typeof(TEntity), propertyType);
+                query = genericMethod.Invoke(null, new object[] { query, sort }) as IQueryable<TEntity>;
             }
             return query;
         }
