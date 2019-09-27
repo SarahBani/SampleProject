@@ -3,6 +3,7 @@ using Infrastructure.DataBase.Repositoy;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -65,12 +66,14 @@ namespace Test.UnitTest.Infrastructure.DataBase
             // Arrange
             var entity = Entity;
             base.DataBaseContextMock.Setup(q => q.Attach(It.IsAny<TEntity>())).Verifiable();
+            this.DataBaseContextMock.Setup(q => q.SetModified(It.IsAny<TEntity>())).Verifiable();
 
             //Act
             this.Repository.Update(entity);
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Attach(It.IsAny<TEntity>()), "error in calling the correct method");
+            this.DataBaseContextMock.Verify(q => q.SetModified(It.IsAny<TEntity>()), "error in calling the correct method");
         }
 
         #region Delete
@@ -107,22 +110,23 @@ namespace Test.UnitTest.Infrastructure.DataBase
             this.DataBaseContextMock.Verify(q => q.Remove(It.IsAny<TEntity>()), "error in calling the correct method");
         }
 
-        //[Test]
-        //public void Delete_ByFilter_ReturnsOK()
-        //{
-        //    // Arrange
-        //    var entities = EntityList.AsQueryable();
-        //    Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(6);
-        //    base.DataBaseContextMock.Setup(q => q.Set<TEntity>().AsQueryable().Where(filter)).Returns(entities);
-        //    base.DataBaseContextMock.Setup(q => q.RemoveRange(It.IsAny<TEntity>())).Verifiable();
+        [Test]
+        public void Delete_ByFilter_ReturnsOK()
+        {
+            // Arrange
+            Expression<Func<TEntity, bool>> filter = q => long.Parse(q.Id.ToString()) >= 3;
+            var entities = EntityList.AsQueryable().Where(filter);
+            var dbSetMock = base.GetDbSetMock();
+            base.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
+            base.DataBaseContextMock.Setup(q => q.RemoveRange(It.IsAny<IEnumerable<TEntity>>())).Verifiable();
 
-        //    //Act
-        //    this.Repository.Delete(filter);
+            //Act
+            this.Repository.Delete(filter);
 
-        //    // Assert
-        //    this.DataBaseContextMock.Verify(q => q.Set<TEntity>().AsQueryable().Where(filter), "error in calling the correct method");
-        //    this.DataBaseContextMock.Verify(q => q.RemoveRange(It.IsAny<TEntity>()), "error in calling the correct method");
-        //}
+            // Assert
+            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
+            this.DataBaseContextMock.Verify(q => q.RemoveRange(It.IsAny<IEnumerable<TEntity>>()), "error in calling the correct method");
+        }
 
         #endregion /Delete
 

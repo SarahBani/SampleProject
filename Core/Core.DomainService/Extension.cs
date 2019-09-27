@@ -11,13 +11,16 @@ namespace Core.DomainServices
 
         public static IQueryable<TEntity> SetOrder<TEntity>(this IQueryable<TEntity> query, IList<Sort> sorts)
         {
-            foreach (var sort in sorts)
+            if (sorts != null)
             {
-                var propertyType = typeof(TEntity).GetProperty(sort.SortField).PropertyType;
+                foreach (var sort in sorts)
+                {
+                    var propertyType = typeof(TEntity).GetProperty(sort.SortField).PropertyType;
 
-                var method = typeof(Utility).GetMethod("SetOrderExpression");
-                var genericMethod = method.MakeGenericMethod(typeof(TEntity), propertyType);
-                query = genericMethod.Invoke(null, new object[] { query, sort }) as IQueryable<TEntity>;
+                    var method = typeof(Utility).GetMethod("SetOrderExpression");
+                    var genericMethod = method.MakeGenericMethod(typeof(TEntity), propertyType);
+                    query = genericMethod.Invoke(null, new object[] { query, sort }) as IQueryable<TEntity>;
+                }
             }
             return query;
         }

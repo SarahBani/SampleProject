@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using Core.DomainModel.Entities;
 using Infrastructure.DataBase.Repository;
 using NUnit.Framework;
@@ -8,7 +6,7 @@ using NUnit.Framework;
 namespace Test.UnitTest.Infrastructure.DataBase
 {
     [TestFixture]
-    public class BankRepositoryTests : RepositoryTests<Bank, int>
+    public class CountryRepositoryTests : ReadOnlyRepositoryTests<Country, short>
     {
 
         #region Properties
@@ -18,33 +16,33 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
         #region Constructors
 
-        public BankRepositoryTests()
+        public CountryRepositoryTests()
             : base()
         {
         }
 
-        protected override Bank Entity
+        protected override Country Entity
         {
-            get => new Bank()
+            get => new Country()
             {
                 Id = 3,
-                Name = "Bank1"
+                Name = "Iran"
             };
         }
 
-        protected override IList<Bank> EntityList
+        protected override IList<Country> EntityList
         {
-            get => new List<Bank>
+            get => new List<Country>
                 {
-                    new Bank()
+                    new Country()
                     {
                         Id = 3,
-                        Name = "Bank1"
+                        Name = "Iran"
                     },
-                    new Bank()
+                    new Country()
                     {
                         Id = 4,
-                        Name = "hhhh"
+                        Name = "Turkey"
                     }
                 };
         }
@@ -56,7 +54,7 @@ namespace Test.UnitTest.Infrastructure.DataBase
         [SetUp]
         public override void Setup()
         {
-            base.SetRepository<BankRepository>();
+            base.SetRepository<CountryRepository>();
         }
 
         #endregion /Methods

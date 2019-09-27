@@ -39,7 +39,7 @@ namespace Infrastructure.DataBase.Repositoy
         public virtual void Update(TEntity entity)
         {
             this.MyDBContext.Attach(entity);
-            this.MyDBContext.Entry(entity).State = EntityState.Modified;
+            this.MyDBContext.SetModified(entity);
         }
 
         public virtual void Delete(TKey id)

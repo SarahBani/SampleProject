@@ -174,15 +174,16 @@ namespace Test.UnitTest.Infrastructure.DataBase
         #endregion /GetCount
 
         #region GetSingle
-
+   
         [Test]
         public void GetSingle_ReturnsOK()
         {
             // Arrange
-            var entity = EntityList.Single(q => q.Id.Equals(3));
+            TKey id = (TKey)Convert.ChangeType(3, typeof(TKey));
+            var entity = this.EntityList.Where(q => q.Id.Equals(id)).Single();
             var dbSetMock = GetDbSetMock();
             this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(3);
+            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(id);
 
             //Act
             var result = this.Repository.GetSingle(filter);
@@ -213,10 +214,11 @@ namespace Test.UnitTest.Infrastructure.DataBase
         public void GetSingleAsync_ReturnsOK()
         {
             // Arrange
-            var entity = EntityList.Single(q => q.Id.Equals(3));
+            TKey id = (TKey)Convert.ChangeType(3, typeof(TKey));
+            var entity = EntityList.Single(q => q.Id.Equals(id));
             var dbSetMock = GetDbSetMock();
             this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(3);
+            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(id);
 
             //Act
             var result = this.Repository.GetSingleAsync(filter).Result;
