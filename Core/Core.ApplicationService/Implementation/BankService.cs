@@ -1,6 +1,7 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
 using Core.DomainServices;
+using Core.DomainServices.Repositoy;
 using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Implementation
@@ -9,6 +10,8 @@ namespace Core.ApplicationService.Implementation
     {
 
         #region Properties
+
+        private IBankRepository _repository;
 
         #endregion /Properties
 
@@ -22,6 +25,11 @@ namespace Core.ApplicationService.Implementation
         #endregion /Constructors
 
         #region Methods
+
+        protected override void SetRepository()
+        {
+            this._repository = base.EntityService.GetRepository<Bank, int>() as IBankRepository;
+        }
 
         public async Task<int> GetCountAsync()
         {

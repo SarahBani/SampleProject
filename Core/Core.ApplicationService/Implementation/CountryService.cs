@@ -1,5 +1,6 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
+using Core.DomainServices.Repositoy;
 
 namespace Core.ApplicationService.Implementation
 {
@@ -7,6 +8,8 @@ namespace Core.ApplicationService.Implementation
     {
 
         #region Properties
+
+        private ICountryRepository _repository;
 
         #endregion /Properties
 
@@ -19,7 +22,12 @@ namespace Core.ApplicationService.Implementation
 
         #endregion /Constructors
 
-        #region Methods    
+        #region Methods  
+
+        protected override void SetRepository()
+        {
+            this._repository = base.EntityService.GetRepository<Country, short>() as ICountryRepository;
+        }
 
         #endregion /Methods
 

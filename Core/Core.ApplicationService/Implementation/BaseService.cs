@@ -16,6 +16,8 @@ namespace Core.ApplicationService.Implementation
 
         #region Properties
 
+        private IRepository<TEntity, TKey> _repository;
+
         protected string EntityTypeName
         {
             get
@@ -32,13 +34,6 @@ namespace Core.ApplicationService.Implementation
                 return frame.GetMethod().Name;
             }
         }
-        protected new IRepository<TEntity, TKey> Repository
-        {
-            get
-            {
-                return base.Repository as IRepository<TEntity, TKey>;
-            }
-        }
 
         #endregion /Properties
 
@@ -52,7 +47,12 @@ namespace Core.ApplicationService.Implementation
         #endregion /Constructors
 
         #region Methods
-        
+
+        protected override void SetRepository()
+        {
+            this._repository = base.EntityService.GetRepository<TEntity, TKey>() as IRepository<TEntity, TKey>;
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected async Task<TransactionResult> GetTransactionResultAsync(Action action)
         {
@@ -120,7 +120,7 @@ namespace Core.ApplicationService.Implementation
             try
             {
                 return await GetTransactionResultAsync(() => 
-                    this.Repository.InsertAsync(entity.Trim<TEntity, TKey>()));
+                    this._repository.InsertAsync(entity.Trim<TEntity, TKey>()));
             }
             catch (Exception ex)
             {
@@ -133,7 +133,7 @@ namespace Core.ApplicationService.Implementation
             try
             {
                 return await GetTransactionResultAsync(() => 
-                    this.Repository.Update(entity.Trim<TEntity, TKey>()));
+                    this._repository.Update(entity.Trim<TEntity, TKey>()));
             }
             catch (Exception ex)
             {
@@ -145,7 +145,7 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                return await GetTransactionResultAsync(() => this.Repository.Delete(entity));
+                return await GetTransactionResultAsync(() => this._repository.Delete(entity));
             }
             catch (Exception ex)
             {
@@ -157,7 +157,7 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                return await GetTransactionResultAsync(() => this.Repository.Delete(id));
+                return await GetTransactionResultAsync(() => this._repository.Delete(id));
             }
             catch (Exception ex)
             {

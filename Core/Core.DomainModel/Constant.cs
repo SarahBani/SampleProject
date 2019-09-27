@@ -34,6 +34,9 @@
         public const string Exception_sql_HasDuplicateInfo = "The record has duplicate information!";
         public const string Exception_sql_ArithmeticOverflow = "The record field value is too big!";
 
+        public const string InvalidWebServiceAssignmentToken = "Token is invalid!";
+        public const string WebServiceAssignmentExpired = "Your token has been expired!";
+
         #endregion /Exceptions
 
     }

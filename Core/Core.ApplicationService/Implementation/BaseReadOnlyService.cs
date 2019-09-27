@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 namespace Core.ApplicationService.Implementation
 {
     public abstract class BaseReadOnlyService<TEntity, TKey>
-          where TEntity : Entity<TKey>
+         where TEntity : Entity<TKey>
     {
 
         #region Properties
 
-        protected IReadOnlyRepository<TEntity, TKey> Repository { get; private set; }
+        private IReadOnlyRepository<TEntity, TKey> _repository;
 
         protected IEntityService EntityService { get; set; }
 
@@ -26,7 +26,8 @@ namespace Core.ApplicationService.Implementation
         public BaseReadOnlyService(IEntityService entityService)
         {
             this.EntityService = entityService;
-            this.Repository = this.EntityService.GetRepository<TEntity, TKey>();
+            this._repository = this.EntityService.GetRepository<TEntity, TKey>();
+            SetRepository();
         }
 
         public BaseReadOnlyService()
@@ -38,19 +39,21 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
+        protected abstract void SetRepository();
+
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            return await this.Repository.GetByIdAsync(id);
+            return await this._repository.GetByIdAsync(id);
         }
 
         public virtual async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-            return await this.Repository.GetCountAsync(filter);
+            return await this._repository.GetCountAsync(filter);
         }
 
         public virtual async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await this.Repository.GetSingleAsync(filter);
+            return await this._repository.GetSingleAsync(filter);
         }
 
         public virtual async Task<IList<TEntity>> GetAllAsync()
@@ -60,7 +63,7 @@ namespace Core.ApplicationService.Implementation
 
         protected async Task<IQueryable<TEntity>> GetQueryableAsync()
         {
-            return await this.Repository.GetQueryableAsync();
+            return await this._repository.GetQueryableAsync();
         }
 
         protected async Task<IEnumerable<TEntity>> GetEnumerableAsync(
@@ -68,7 +71,7 @@ namespace Core.ApplicationService.Implementation
             IList<Sort> sorts = null,
             Page page = null)
         {
-            return await this.Repository.GetEnumerableAsync(filter, sorts, page);
+            return await this._repository.GetEnumerableAsync(filter, sorts, page);
         }
 
         #endregion /Methods

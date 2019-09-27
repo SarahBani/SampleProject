@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
 
         #region Constructors
 
-        public BaseController(IWebServiceAssignmentService webServiceAssignmentService)
+        public BaseAPIController(IWebServiceAssignmentService webServiceAssignmentService)
         {
             this._webServiceAssignmentService = webServiceAssignmentService;
         }
