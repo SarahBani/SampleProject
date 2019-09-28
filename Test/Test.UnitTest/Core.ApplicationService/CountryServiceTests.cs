@@ -3,6 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainServices.Repositoy;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Test.UnitTest.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -19,28 +20,12 @@ namespace Test.UnitTest.Core.ApplicationService
 
         protected override Country Entity
         {
-            get => new Country()
-            {
-                Id = 3,
-                Name = "Iran"
-            };
+            get => new CountryModel().Entity;
         }
 
         protected override IList<Country> EntityList
         {
-            get => new List<Country>
-                {
-                    new Country()
-                    {
-                        Id = 3,
-                        Name = "Iran"
-                    },
-                    new Country()
-                    {
-                        Id = 4,
-                        Name = "Turkey"
-                    }
-                };
+            get => new CountryModel().EntityList;
         }
 
         #endregion /Properties

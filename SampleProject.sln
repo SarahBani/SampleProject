@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication", "UserInter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.UnitTest", "Test\Test.UnitTest\Test.UnitTest.csproj", "{0B326345-DB88-45B8-A26A-E9AA70B67EC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.IntegrationTest", "Test\Test.IntegrationTest\Test.IntegrationTest.csproj", "{78655E55-8C4D-488A-8D1E-F3F20A318736}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.IntegrationTest", "Test\Test.IntegrationTest\Test.IntegrationTest.csproj", "{78655E55-8C4D-488A-8D1E-F3F20A318736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

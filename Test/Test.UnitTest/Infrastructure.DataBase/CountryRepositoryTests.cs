@@ -2,6 +2,7 @@
 using Core.DomainModel.Entities;
 using Infrastructure.DataBase.Repository;
 using NUnit.Framework;
+using Test.UnitTest.Common.Models;
 
 namespace Test.UnitTest.Infrastructure.DataBase
 {
@@ -11,6 +12,15 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
         #region Properties
 
+        protected override Country Entity
+        {
+            get => new CountryModel().Entity;
+        }
+
+        protected override IList<Country> EntityList
+        {
+            get => new CountryModel().EntityList;
+        }
 
         #endregion /Properties
 
@@ -19,32 +29,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
         public CountryRepositoryTests()
             : base()
         {
-        }
-
-        protected override Country Entity
-        {
-            get => new Country()
-            {
-                Id = 3,
-                Name = "Iran"
-            };
-        }
-
-        protected override IList<Country> EntityList
-        {
-            get => new List<Country>
-                {
-                    new Country()
-                    {
-                        Id = 3,
-                        Name = "Iran"
-                    },
-                    new Country()
-                    {
-                        Id = 4,
-                        Name = "Turkey"
-                    }
-                };
         }
 
         #endregion /Constructors

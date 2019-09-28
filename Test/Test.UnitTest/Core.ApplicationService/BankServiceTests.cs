@@ -3,6 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainServices.Repositoy;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Test.UnitTest.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -19,28 +20,12 @@ namespace Test.UnitTest.Core.ApplicationService
 
         protected override Bank Entity
         {
-            get => new Bank()
-            {
-                Id = 3,
-                Name = "sdgsg"
-            };
+            get => new BankModel().Entity;
         }
 
         protected override IList<Bank> EntityList
         {
-            get => new List<Bank>
-                {
-                    new Bank()
-                    {
-                        Id = 3,
-                        Name = "sdgsg"
-                    },
-                    new Bank()
-                    {
-                        Id = 4,
-                        Name = "hhhh"
-                    }
-                };
+            get => new BankModel().EntityList;
         }
 
         #endregion /Properties

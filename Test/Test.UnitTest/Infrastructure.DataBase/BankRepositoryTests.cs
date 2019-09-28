@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using Core.DomainModel.Entities;
 using Infrastructure.DataBase.Repository;
 using NUnit.Framework;
+using Test.UnitTest.Common.Models;
 
 namespace Test.UnitTest.Infrastructure.DataBase
 {
@@ -13,6 +12,16 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
         #region Properties
 
+        protected override Bank Entity
+        {
+            get => new BankModel().Entity;
+        }
+
+        protected override IList<Bank> EntityList
+        {
+            get => new BankModel().EntityList;
+        }
+
 
         #endregion /Properties
 
@@ -21,32 +30,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
         public BankRepositoryTests()
             : base()
         {
-        }
-
-        protected override Bank Entity
-        {
-            get => new Bank()
-            {
-                Id = 3,
-                Name = "Bank1"
-            };
-        }
-
-        protected override IList<Bank> EntityList
-        {
-            get => new List<Bank>
-                {
-                    new Bank()
-                    {
-                        Id = 3,
-                        Name = "Bank1"
-                    },
-                    new Bank()
-                    {
-                        Id = 4,
-                        Name = "hhhh"
-                    }
-                };
         }
 
         #endregion /Constructors

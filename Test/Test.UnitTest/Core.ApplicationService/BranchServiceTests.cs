@@ -1,12 +1,12 @@
 ﻿using Core.ApplicationService.Implementation;
 using Core.DomainModel.Entities;
 using Core.DomainServices.Repositoy;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Test.UnitTest.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -23,40 +23,12 @@ namespace Test.UnitTest.Core.ApplicationService
 
         protected override Branch Entity
         {
-            get
-            {
-                var country = new Country()
-                {
-                    Id = 5,
-                    Name = "ffffff"
-                };
-                var address = new Address(country, "Rasht", "fhfh fghjf dgh", "17", "1998737863");
-                return new Branch()
-                {
-                    Id = 3,
-                    BankId = 5,
-                    Code = 50,
-                    Name = "sdgsg",
-                    Address = address
-                };
-            }
+            get => new BranchModel().Entity;
         }
 
         protected override IList<Branch> EntityList
         {
-            get => new List<Branch>
-                {
-                    new Branch()
-                    {
-                        Id = 3,
-                        Name = "sdgsg"
-                    },
-                    new Branch()
-                    {
-                        Id = 4,
-                        Name = "hjgj"
-                    }
-                };
+            get => new BranchModel().EntityList;
         }
 
         #endregion /Properties
@@ -112,7 +84,7 @@ namespace Test.UnitTest.Core.ApplicationService
             // comparing expressions
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetCountAsync(expression), 
+            base.RepositoryMock.Verify(q => q.GetCountAsync(expression),
                 "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
@@ -130,7 +102,7 @@ namespace Test.UnitTest.Core.ApplicationService
             var result = this.Service.GetListByBankIdAsync(bankId).Result;
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null), 
+            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null),
                 "error in calling the correct method");  // Verifies that Repository.GetEnumerableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }

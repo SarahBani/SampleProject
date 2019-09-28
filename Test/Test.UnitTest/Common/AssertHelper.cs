@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Test.UnitTest.Infrastructure.DataBase
+namespace Test.UnitTest.Infrastructure.Common
 {
     public static class AssertHelper
     {
