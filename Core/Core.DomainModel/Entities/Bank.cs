@@ -36,6 +36,9 @@ namespace Core.DomainModel.Entities
     {
         public void Configure(EntityTypeBuilder<Bank> builder)
         {
+            builder.HasIndex(q => q.Name)
+                .IsUnique();
+
             builder.Property(q => q.Name)
                 .IsRequired()
                 .HasMaxLength(40);

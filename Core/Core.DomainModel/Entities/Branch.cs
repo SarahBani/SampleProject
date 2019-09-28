@@ -55,6 +55,8 @@ namespace Core.DomainModel.Entities
     {
         public void Configure(EntityTypeBuilder<Branch> builder)
         {
+            builder.HasAlternateKey(q => new { q.BankId, q.Name }); // unique key
+
             builder.Property(q => q.Code)
                       .IsRequired();
 
