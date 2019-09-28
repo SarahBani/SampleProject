@@ -17,7 +17,7 @@ namespace Core.DomainModel.Entities
 
         public string CompanyName { get; set; }
 
-        public byte WebServiceType { get; set; }
+        public WebServiceType WebServiceType { get; set; }
 
         public Guid Token { get; set; }
 
@@ -43,11 +43,11 @@ namespace Core.DomainModel.Entities
                 .IsRequired()
                 .HasMaxLength(50);
 
-            //builder.Property(q => q.WebServiceType)
-            //    .HasColumnType("tinyint");
+            builder.Property(q => q.WebServiceType)
+                .HasColumnType("tinyint");
 
             builder.Property(q => q.Token)
-                .HasDefaultValue(Guid.NewGuid());
+                .HasDefaultValue(Guid.Empty);
         }
     }
 }

@@ -4,14 +4,16 @@ using Core.DomainModel.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.DomainModel.Migrations
 {
     [DbContext(typeof(SampleDataBaseContext))]
-    partial class SampleDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190928103753_WebServiceAssignmnet WebServiceType type")]
+    partial class WebServiceAssignmnetWebServiceTypetype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,7 +87,7 @@ namespace Core.DomainModel.Migrations
 
                     b.Property<Guid>("Token")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000000"));
+                        .HasDefaultValue(new Guid("3f99011e-dccf-40a5-8e64-cb88af933016"));
 
                     b.Property<DateTime>("ValidationDate");
 
