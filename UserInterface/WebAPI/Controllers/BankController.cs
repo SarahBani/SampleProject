@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
 
         // GET: api/BankAPI
         [HttpGet]
-        public async Task<IActionResult> GetAsync(string token)
+        public async Task<IActionResult> GetAsync() // string token
         {
             var banks = await this._bankService.GetAllAsync();
             return new OkObjectResult(banks);

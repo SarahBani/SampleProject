@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Core.DomainModel.Entities;
 using Infrastructure.DataBase.Repository;
 using NUnit.Framework;

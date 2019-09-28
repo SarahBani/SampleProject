@@ -90,10 +90,10 @@ namespace Core.ApplicationService
 
         #region Constructors
 
-        public EntityService(IRepository<Country, short> countryRepository, 
+        public EntityService(IReadOnlyRepository<Country, short> countryRepository, 
             IRepository<Bank, int> bankRepository,
             IRepository<Branch, int> branchRepository,
-            IRepository<WebServiceAssignment, short> webServiceAssignment,
+            IReadOnlyRepository<WebServiceAssignment, short> webServiceAssignment,
             IUnitOfWork unitOfWork)
         {
             this.CountryRepository = (countryRepository as ICountryRepository);

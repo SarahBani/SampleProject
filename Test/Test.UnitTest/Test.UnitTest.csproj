@@ -19,4 +19,9 @@
     <ProjectReference Include="..\..\Infrastructure.DataBase\Infrastructure.DataBase.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UserInterface.WebApplication\" />
+    <Folder Include="UserInterface.WebAPI\" />
+  </ItemGroup>
+
 </Project>
