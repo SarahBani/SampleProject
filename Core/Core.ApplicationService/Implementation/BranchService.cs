@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Implementation
 {
-    public class BranchService : BaseService<Branch, int>, IBranchService
+    public class BranchService : BaseService<IBranchRepository, Branch, int>, IBranchService
     {
 
         #region Properties
-
-        private IBranchRepository _repository;
 
         #endregion /Properties
 
@@ -27,11 +25,6 @@ namespace Core.ApplicationService.Implementation
         #endregion /Constructors
 
         #region Methods
-
-        protected override void SetRepository()
-        {
-            this._repository = base.EntityService.GetRepository<Branch, int>() as IBranchRepository;
-        }
 
         public Task<int> GetCountByBankIdAsync(int bankId)
         {

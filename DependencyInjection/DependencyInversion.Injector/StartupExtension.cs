@@ -22,6 +22,7 @@ namespace DependencyInjection.Injector
             services.AddScoped<IRepository<Branch, int>, BranchRepository>();
             services.AddScoped<IReadOnlyRepository<WebServiceAssignment, short>, WebServiceAssignmentRepository>();
 
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBranchService, BranchService>();

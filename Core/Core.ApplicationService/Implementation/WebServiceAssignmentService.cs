@@ -7,13 +7,11 @@ using System;
 
 namespace Core.ApplicationService.Implementation
 {
-    public class WebServiceAssignmentService : BaseReadOnlyService<WebServiceAssignment, short>,
+    public class WebServiceAssignmentService : BaseReadOnlyService<IWebServiceAssignmentRepository, WebServiceAssignment, short>,
         IWebServiceAssignmentService
     {
 
         #region Properties
-
-        private IWebServiceAssignmentRepository _repository;
 
         #endregion /Properties
 
@@ -28,14 +26,9 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods  
 
-        protected override void SetRepository()
-        {
-            this._repository = base.EntityService.GetRepository<WebServiceAssignment, short>() as IWebServiceAssignmentRepository;
-        }
-
         public TransactionResult GetValidationByToken(Guid token)
         {
-            var webServiceAssignment = this._repository.GetByTokenAsync(token).Result;
+            var webServiceAssignment = base.Repository.GetByTokenAsync(token).Result;
             if (webServiceAssignment == null)
             {
                 return new TransactionResult(new CustomException(ExceptionKey.InvalidWebServiceAssignmentToken));

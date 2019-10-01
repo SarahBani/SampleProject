@@ -36,6 +36,7 @@
 
         public const string InvalidWebServiceAssignmentToken = "Token is invalid!";
         public const string WebServiceAssignmentExpired = "Your token has been expired!";
+        public const string InvalidAuthentication = "The authentication is invalid!";
 
         #endregion /Exceptions
 

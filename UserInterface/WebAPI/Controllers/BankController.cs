@@ -2,12 +2,15 @@
 using System.Transactions;
 using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
+using Core.DomainServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class BankController : BaseAPIController
     {
 
@@ -32,7 +35,7 @@ namespace WebAPI.Controllers
 
         // GET: api/BankAPI
         [HttpGet]
-        public async Task<IActionResult> GetAsync() // string token
+        public async Task<IActionResult> GetAsync()
         {
             var banks = await this._bankService.GetAllAsync();
             return new OkObjectResult(banks);
@@ -40,7 +43,7 @@ namespace WebAPI.Controllers
 
         // GET: api/BankAPI/5
         [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> GetAsync(string token, int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var bank = await this._bankService.GetByIdAsync(id);
             return new OkObjectResult(bank);
@@ -48,28 +51,32 @@ namespace WebAPI.Controllers
 
         // POST: api/BankAPI
         [HttpPost]
-        public async Task<IActionResult> PostAsync(string token, [FromBody]  Bank bank)
+        public async Task<IActionResult> PostAsync([FromBody]Bank bank)
         {
+            TransactionResult result;
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await this._bankService.InsertAsync(bank);//.ConfigureAwait(false); not needed in .net Core
-                scope.Complete();
+                result = await this._bankService.InsertAsync(bank);
+                if (result.IsSuccessful) {
+                    scope.Complete();
+                    return CreatedAtAction(nameof(GetAsync), new
+                    {
+                        id = bank.Id
+                    }, bank);
+                }
             }
-            return CreatedAtAction(nameof(GetAsync), new
-            {
-                id = bank.Id
-            }, bank);
+            return BadRequest(result.ExceptionContentResult);
         }
 
         // PUT: api/BankAPI/
         [HttpPut]
-        public async Task<IActionResult> Put(string token, [FromBody] Bank bank)
+        public async Task<IActionResult> Put([FromBody] Bank bank)
         {
             if (bank != null)
             {
                 using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    await this._bankService.UpdateAsync(bank);//.ConfigureAwait(false); not needed in .net Core
+                    await this._bankService.UpdateAsync(bank);
                     scope.Complete();
                 }
                 return new OkResult();
@@ -79,11 +86,11 @@ namespace WebAPI.Controllers
 
         // DELETE: api/BankAPI/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string token, int id)
+        public async Task<IActionResult> Delete(int id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await this._bankService.DeleteAsync(id);//.ConfigureAwait(false); not needed in .net Core
+                await this._bankService.DeleteAsync(id);
                 scope.Complete();
             }
             return new OkResult();

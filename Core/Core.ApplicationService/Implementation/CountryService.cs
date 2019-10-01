@@ -4,12 +4,10 @@ using Core.DomainServices.Repositoy;
 
 namespace Core.ApplicationService.Implementation
 {
-    public class CountryService : BaseReadOnlyService<Country, short>, ICountryService
+    public class CountryService : BaseReadOnlyService<ICountryRepository, Country, short>, ICountryService
     {
 
         #region Properties
-
-        private ICountryRepository _repository;
 
         #endregion /Properties
 
@@ -23,11 +21,6 @@ namespace Core.ApplicationService.Implementation
         #endregion /Constructors
 
         #region Methods  
-
-        protected override void SetRepository()
-        {
-            this._repository = base.EntityService.GetRepository<Country, short>() as ICountryRepository;
-        }
 
         #endregion /Methods
 

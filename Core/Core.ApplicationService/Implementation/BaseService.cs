@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Implementation
 {
-    public abstract class BaseService<TEntity, TKey> : BaseReadOnlyService<TEntity, TKey>
-         where TEntity : Entity<TKey>
+    public abstract class BaseService<TRepository, TEntity, TKey> : BaseReadOnlyService<TRepository, TEntity, TKey>
+        where TRepository : IRepository<TEntity, TKey>
+        where TEntity : Entity<TKey>
     {
 
         #region Properties
-
-        private IRepository<TEntity, TKey> _repository;
 
         protected string EntityTypeName
         {
@@ -48,11 +47,6 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        protected override void SetRepository()
-        {
-            this._repository = base.EntityService.GetRepository<TEntity, TKey>() as IRepository<TEntity, TKey>;
-        }
-
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected async Task<TransactionResult> GetTransactionResultAsync(Action action)
         {
@@ -66,16 +60,16 @@ namespace Core.ApplicationService.Implementation
         {
             //if (string.IsNullOrEmpty(this.UnitOfWork.GetTransactionName()))
             //{            
-            this.EntityService.UnitOfWork.BeginTransaction(GetCallerMethod());
+            base.EntityService.UnitOfWork.BeginTransaction(GetCallerMethod());
             //}
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected async Task<TransactionResult> CommitTransactionAsync()
         {
-            if (this.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
+            if (base.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
             {
-                await this.EntityService.UnitOfWork.Commit();
+                await base.EntityService.UnitOfWork.Commit();
             }
             return new TransactionResult();
         }
@@ -85,7 +79,7 @@ namespace Core.ApplicationService.Implementation
         {
             int intSkipFrames = 0;
             while (new StackFrame(intSkipFrames).GetMethod().GetMethodImplementationFlags() == MethodImplAttributes.NoInlining ||
-                   !new StackFrame(intSkipFrames).GetMethod().DeclaringType.BaseType.Name.Equals(typeof(BaseReadOnlyService<,>).Name))
+                   !new StackFrame(intSkipFrames).GetMethod().DeclaringType.BaseType.Name.Equals(typeof(BaseReadOnlyService<,,>).Name))
             {
                 intSkipFrames++;
             }
@@ -96,31 +90,30 @@ namespace Core.ApplicationService.Implementation
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected TransactionResult GetTransactionException(Exception exception)
         {
-            if (this.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
+            //if (base.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
+            //{
+            base.EntityService.UnitOfWork.RollBack();
+            //Utility.SaveError(exception.GetBaseException());
+            if (exception is CustomException)
             {
-                this.EntityService.UnitOfWork.RollBack();
-                //Utility.SaveError(exception.GetBaseException());
-                if (exception is CustomException)
-                {
-                    return new TransactionResult(exception as CustomException);
-                }
-                else
-                {
-                    return new TransactionResult(new CustomException(exception));
-                }
+                return new TransactionResult(exception as CustomException);
             }
             else
             {
-                throw exception;
+                return new TransactionResult(new CustomException(exception));
             }
+            //}
+            //else
+            //{
+            //    throw exception;
+            //}
         }
 
         public virtual async Task<TransactionResult> InsertAsync(TEntity entity)
         {
             try
             {
-                return await GetTransactionResultAsync(() => 
-                    this._repository.InsertAsync(entity.Trim<TEntity, TKey>()));
+                return await GetTransactionResultAsync(() => base.Repository.InsertAsync(entity.Trim<TEntity, TKey>()));
             }
             catch (Exception ex)
             {
@@ -132,8 +125,7 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                return await GetTransactionResultAsync(() => 
-                    this._repository.Update(entity.Trim<TEntity, TKey>()));
+                return await GetTransactionResultAsync(() => base.Repository.Update(entity.Trim<TEntity, TKey>()));
             }
             catch (Exception ex)
             {
@@ -145,7 +137,7 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                return await GetTransactionResultAsync(() => this._repository.Delete(entity));
+                return await GetTransactionResultAsync(() => base.Repository.Delete(entity));
             }
             catch (Exception ex)
             {
@@ -157,7 +149,7 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                return await GetTransactionResultAsync(() => this._repository.Delete(id));
+                return await GetTransactionResultAsync(() => base.Repository.Delete(id));
             }
             catch (Exception ex)
             {

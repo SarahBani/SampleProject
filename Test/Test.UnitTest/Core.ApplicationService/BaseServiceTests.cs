@@ -15,9 +15,9 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Properties
 
-        protected new BaseService<TEntity, TKey> Service
+        protected new BaseService<TRepository, TEntity, TKey> Service
         {
-            get => base.Service as BaseService<TEntity, TKey>;
+            get => base.Service as BaseService<TRepository, TEntity, TKey>;
         }
 
         #endregion /Properties

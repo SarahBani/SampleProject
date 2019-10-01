@@ -21,7 +21,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         protected Mock<TRepository> RepositoryMock { get; private set; }
 
-        protected BaseReadOnlyService<TEntity, TKey> Service { get; set; }
+        protected BaseReadOnlyService<TRepository, TEntity, TKey> Service { get; set; }
 
         protected abstract TEntity Entity { get; }
 
@@ -50,7 +50,7 @@ namespace Test.UnitTest.Core.ApplicationService
         [SetUp]
         public abstract void Setup();
 
-        protected void SetService<T>() where T : BaseReadOnlyService<TEntity, TKey>
+        protected void SetService<T>() where T : BaseReadOnlyService<TRepository, TEntity, TKey>
         {
             this.Service = (T)Activator.CreateInstance(typeof(T), this.EntityServiceMock.Object);
         }
