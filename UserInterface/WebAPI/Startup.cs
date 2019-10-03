@@ -43,6 +43,10 @@ namespace WebAPI
             services.SetInjection();
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                //.ConfigureApiBehaviorOptions(options =>
+                //{
+                //    options.SuppressModelStateInvalidFilter = true;
+                //});
 
             SetAuthorization(services);
         }

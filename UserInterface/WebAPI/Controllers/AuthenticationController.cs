@@ -4,6 +4,7 @@ using Core.DomainService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebAPI.Controllers
 {
@@ -38,7 +39,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (_authService.IsAuthenticated(request).Result)
+            if (await _authService.IsAuthenticated(request))
             {
                 string token = _authService.GetAuthenticationToken(request);
                 return Ok(token);

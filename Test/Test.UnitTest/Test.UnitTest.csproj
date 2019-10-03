@@ -7,21 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="Moq" Version="4.13.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.ApplicationService\Core.ApplicationService.csproj" />
     <ProjectReference Include="..\..\Core\Core.DomainModel\Core.DomainModel.csproj" />
     <ProjectReference Include="..\..\Infrastructure.DataBase\Infrastructure.DataBase.csproj" />
+    <ProjectReference Include="..\..\UserInterface\WebAPI\WebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="UserInterface.WebApplication\" />
-    <Folder Include="UserInterface.WebAPI\" />
   </ItemGroup>
 
 </Project>

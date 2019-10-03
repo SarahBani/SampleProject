@@ -5,7 +5,7 @@
 
         #region Properties
 
-        public string SecretKey { get; set; }
+        public virtual string SecretKey { get; set; }
 
         #endregion /Properties
 

@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class BankController : BaseAPIController
+    public class BankController : ControllerBase
     {
 
         #region Properties
@@ -22,9 +22,7 @@ namespace WebAPI.Controllers
 
         #region Constructors
 
-        public BankController(IBankService bankService,
-            IWebServiceAssignmentService webServiceAssignmentService)
-            : base(webServiceAssignmentService)
+        public BankController(IBankService bankService)
         {
             this._bankService = bankService;
         }
@@ -74,12 +72,20 @@ namespace WebAPI.Controllers
         {
             if (bank != null)
             {
+                TransactionResult result;
                 using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    await this._bankService.UpdateAsync(bank);
-                    scope.Complete();
+                    result = await this._bankService.UpdateAsync(bank);
+                    if (result.IsSuccessful)
+                    {
+                        scope.Complete();
+                        return new OkResult();
+                    }
+                    else
+                    {
+                        return BadRequest(result.ExceptionContentResult);
+                    }
                 }
-                return new OkResult();
             }
             return new NoContentResult();
         }
@@ -88,12 +94,17 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            TransactionResult result;
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                await this._bankService.DeleteAsync(id);
-                scope.Complete();
+                result = await this._bankService.DeleteAsync(id);
+                if (result.IsSuccessful)
+                {
+                    scope.Complete();
+                    return new OkResult();
+                }
             }
-            return new OkResult();
+            return BadRequest(result.ExceptionContentResult);
         }
 
         #endregion /Actions

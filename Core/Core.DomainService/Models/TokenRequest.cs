@@ -5,11 +5,12 @@ namespace Core.DomainService.Models
 {
     public class TokenRequest
     {
-        [Required]
+
+        [Required(AllowEmptyStrings = false)]
         [JsonProperty("username")]
         public string Username { get; set; }
-        
-        [Required]
+
+        [Required(AllowEmptyStrings = false)]
         [JsonProperty("password")]
         public string Password { get; set; }
 

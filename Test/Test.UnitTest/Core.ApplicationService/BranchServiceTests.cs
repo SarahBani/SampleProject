@@ -38,7 +38,6 @@ namespace Test.UnitTest.Core.ApplicationService
         public BranchServiceTests()
             : base()
         {
-            //base.GetService<BaseService>();
         }
 
         #endregion /Constructors
