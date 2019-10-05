@@ -2,15 +2,25 @@
 This is a sample project for the purpose of demonstration. 
 I have worked on lots of enterprise projects for different companies which I cannot share the codes on the internet. 
 So, I decided to make a sample project with the following features: 
+
 • .NetCore 2.2
+
 • C#.NET 
+
 • Onion Architecture
+
 • WebAPI 
+
 • SQL Server 
+
 • Entity Framework (Code First)
+
 • TDD 
+
 • Unit Testing
+
 • JSON Web Token (JWT) authentication 
+
 
 I focus on the layers, tools and technologies. 
 The domain is totally simple and contains only simple tables. 
