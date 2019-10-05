@@ -10,6 +10,7 @@ So, I decided to make a sample project with the following features:
 • Entity Framework (Code First)
 • TDD 
 • Unit Testing
+• JSON Web Token (JWT) authentication 
 
 I focus on the layers, tools and technologies. 
 The domain is totally simple and contains only simple tables. 
