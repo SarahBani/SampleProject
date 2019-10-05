@@ -22,6 +22,7 @@ So, I decided to make a sample project with the following features:
 • JSON Web Token (JWT) authentication 
 
 
+
 I focus on the layers, tools and technologies. 
 The domain is totally simple and contains only simple tables. 
 I am working on it and complete this demo whenever I find a free time. 
