@@ -1,5 +1,5 @@
 ﻿using Core.DomainModel.Entities;
-using Core.DomainServices;
+using Core.DomainService;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

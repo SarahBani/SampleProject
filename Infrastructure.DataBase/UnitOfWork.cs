@@ -1,6 +1,6 @@
 ﻿using Core.DomainModel;
 using Core.DomainModel.Entities;
-using Core.DomainServices;
+using Core.DomainService;
 using System;
 using System.Threading.Tasks;
 

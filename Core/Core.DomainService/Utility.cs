@@ -4,10 +4,9 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Linq.Expressions;
-using Core.DomainModel.Settings;
 using System.Linq;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
     public static class Utility
     {
@@ -17,10 +16,10 @@ namespace Core.DomainServices
             return config.GetConnectionString(Constant.AppSetting_DefaultConnection);
         }
 
-        public static T GetApplicationSettingSecion<T>(IConfiguration config) where T : class, ISetting
-        {
-            return config.GetSection(typeof(T).Name).Get<T>();
-        }
+        //public static T GetApplicationSettingSecion<T>(IConfiguration config) where T : class, ISetting
+        //{
+        //    return config.GetSection(typeof(T).Name).Get<T>();
+        //}
 
         public static string GetApplicationSetting(IConfiguration config, string key)
         {

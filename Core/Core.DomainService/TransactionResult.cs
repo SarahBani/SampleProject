@@ -1,6 +1,6 @@
 ﻿using Core.DomainModel;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
     public class TransactionResult
     {

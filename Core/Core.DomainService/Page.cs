@@ -1,4 +1,4 @@
-﻿namespace Core.DomainServices
+﻿namespace Core.DomainService
 {
     public class Page
     {

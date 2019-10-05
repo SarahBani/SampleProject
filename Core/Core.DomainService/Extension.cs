@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
     public static class Extension
     {

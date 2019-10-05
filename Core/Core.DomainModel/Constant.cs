@@ -28,6 +28,8 @@
         public const string Exception_SendEmailError = "There has been an error in sending the email!";
         public const string Exception_EmailAlreadyRegisteredError = "This email has already registered!";
         public const string Exception_EmailNotRegisteredError = "This email has not registered yet!";
+        public const string Exception_PathNotFound = "The path could not be found!";
+        public const string Exception_FailedAuthentication = "Authentication failed!";
 
         public const string Exception_sql_TimeoutExpired = "Database timeout has expired!";
         public const string Exception_sql_HasDepandantInfo = "The record has depandant information!";

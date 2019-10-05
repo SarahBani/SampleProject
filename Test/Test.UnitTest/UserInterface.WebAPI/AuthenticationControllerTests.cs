@@ -2,6 +2,7 @@
 using Core.DomainModel;
 using Core.DomainService;
 using Core.DomainService.Models;
+using MicroService.AuthenticationService.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Test.UnitTest.Infrastructure.Common;
-using WebAPI.Controllers;
 
 namespace Test.UnitTest.UserInterface.WebAPI
 {

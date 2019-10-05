@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
     public interface IUnitOfWork : IDisposable
     {

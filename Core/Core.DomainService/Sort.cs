@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
 
     public enum SortDirection

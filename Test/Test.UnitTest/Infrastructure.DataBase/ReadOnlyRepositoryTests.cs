@@ -1,5 +1,5 @@
 ﻿using Core.DomainModel.Entities;
-using Core.DomainServices;
+using Core.DomainService;
 using Infrastructure.DataBase.Repositoy;
 using Microsoft.EntityFrameworkCore;
 using Moq;

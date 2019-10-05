@@ -1,6 +1,6 @@
 ﻿using Core.ApplicationService.Implementation;
-using Core.DomainService;
 using Core.DomainService.Models;
+using Core.DomainService.Settings;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -13,7 +13,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Properties
 
-        private Mock<IOptions<AppSettings>> _appSettingsMock;
+        private Mock<IOptions<AuthenticationAppSettings>> _appSettingsMock;
 
         private AuthenticationService _service;
 
@@ -32,7 +32,7 @@ namespace Test.UnitTest.Core.ApplicationService
         [SetUp]
         public void Setup()
         {
-            this._appSettingsMock = new Mock<IOptions<AppSettings>>();
+            this._appSettingsMock = new Mock<IOptions<AuthenticationAppSettings>>();
             this._appSettingsMock.Setup(q => q.Value.SecretKey).Returns("just_some_secret_big_key_value");
             this._service = new AuthenticationService(this._appSettingsMock.Object);
         }

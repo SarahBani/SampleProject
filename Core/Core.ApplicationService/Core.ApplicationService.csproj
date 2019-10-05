@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Implementation\BaseService.cs~RFac1fc91.TMP" />
+    <None Remove="ve-A810.tmp" />
   </ItemGroup>
 
   <ItemGroup>

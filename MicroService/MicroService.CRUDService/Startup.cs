@@ -1,36 +1,42 @@
-﻿using Core.DomainModel.Entities;
-using Core.DomainServices;
+﻿using System.IO;
+using Core.DomainModel.Entities;
+using DependencyInjection.Injector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
 
-namespace UserInterface.WebApplication
+namespace MicroService.CRUDService
 {
     public class Startup
     {
 
+        #region Properties
+
         public IConfiguration Configuration { get; }
+
+        #endregion /Properties
+
+        #region Constructors
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
+
+        #endregion /Constructors
+
+        #region Methods
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryCache();
-
-            string connectionString = string.Empty;
             if (Configuration["Environment"] != "IntegrationTest")
             {
-                //MyWebRequest.Configure(this.Configuration);
-                connectionString = Utility.GetConnectionString(this.Configuration);
+                string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
+                services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
             else
             {
@@ -38,18 +44,11 @@ namespace UserInterface.WebApplication
                   .SetBasePath(Directory.GetCurrentDirectory())
                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
                 IConfigurationRoot config = builder.Build();
-                //MyWebRequest.Configure(config);
-                connectionString = Utility.GetConnectionString(config);
+                string connectionString = Core.DomainService.Utility.GetConnectionString(config);
+                services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
-            services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
-            //services.SetInjection();
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
+            services.SetInjection();
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -62,21 +61,18 @@ namespace UserInterface.WebApplication
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            // global cors policy
+            app.UseCors(q => q.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
         }
+
+        #endregion /Methods
+
     }
 }

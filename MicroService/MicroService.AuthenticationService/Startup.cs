@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using Core.DomainModel.Entities;
-using Core.DomainService;
+using Core.DomainService.Settings;
 using DependencyInjection.Injector;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,23 +12,33 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebAPI
+namespace MicroService.AuthenticationService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+
+        #region Properties
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        #endregion /Properties
+
+        #region Constructors
+
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
+
+        #endregion /Constructors
+
+        #region Methods
+
         public void ConfigureServices(IServiceCollection services)
         {
             if (Configuration["Environment"] != "IntegrationTest")
             {
-                string connectionString = Core.DomainServices.Utility.GetConnectionString(this.Configuration);
+                string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
                 services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
             else
@@ -37,7 +47,7 @@ namespace WebAPI
                   .SetBasePath(Directory.GetCurrentDirectory())
                      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
                 IConfigurationRoot config = builder.Build();
-                string connectionString = Core.DomainServices.Utility.GetConnectionString(config);
+                string connectionString = Core.DomainService.Utility.GetConnectionString(config);
                 services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
             services.SetInjection();
@@ -51,10 +61,10 @@ namespace WebAPI
         {
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            services.Configure<AuthenticationAppSettings>(appSettingsSection);
 
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            var appSettings = appSettingsSection.Get<AuthenticationAppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
             services.AddAuthentication(x =>
             {
@@ -75,7 +85,6 @@ namespace WebAPI
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -94,5 +103,8 @@ namespace WebAPI
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+
+        #endregion /Methods
+
     }
 }

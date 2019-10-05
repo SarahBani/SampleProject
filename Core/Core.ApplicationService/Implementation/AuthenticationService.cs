@@ -1,5 +1,5 @@
 ﻿using Core.ApplicationService.Contracts;
-using Core.DomainService;
+using Core.DomainService.Settings;
 using Core.DomainService.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,15 +16,15 @@ namespace Core.ApplicationService.Implementation
 
         #region Properties
 
-        private readonly AppSettings _appSettings;
+        private readonly AuthenticationAppSettings _appSettings;
 
         #endregion /Properties
 
         #region Constructors
 
-        public AuthenticationService(IOptions<AppSettings> appSettings)
+        public AuthenticationService(IOptions<AuthenticationAppSettings> appSettings)
         {
-            _appSettings = appSettings.Value;
+            this._appSettings = appSettings.Value;
         }
 
         #endregion /Constructors

@@ -1,4 +1,4 @@
-﻿using Core.DomainServices;
+﻿using Core.DomainService;
 using System;
 
 namespace Core.ApplicationService.Contracts

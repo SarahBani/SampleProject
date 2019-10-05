@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Core.DomainServices.Repositoy
+namespace Core.DomainService.Repositoy
 {
     public interface IWebServiceAssignmentRepository : IReadOnlyRepository<WebServiceAssignment, short>
     {

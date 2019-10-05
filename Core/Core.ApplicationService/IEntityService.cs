@@ -1,7 +1,7 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
-using Core.DomainServices;
-using Core.DomainServices.Repositoy;
+using Core.DomainService;
+using Core.DomainService.Repositoy;
 
 namespace Core.ApplicationService
 {

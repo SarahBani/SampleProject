@@ -4,13 +4,15 @@ using Core.DomainService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Cors;
 
 namespace WebAPI.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
+
     public class AuthenticationController : ControllerBase
     {
 

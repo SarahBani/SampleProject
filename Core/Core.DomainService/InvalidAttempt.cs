@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.DomainServices
+namespace Core.DomainService
 {
     public class InvalidAttempt
     {

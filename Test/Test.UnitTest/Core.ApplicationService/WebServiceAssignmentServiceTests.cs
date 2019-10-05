@@ -1,6 +1,6 @@
 ﻿using Core.ApplicationService.Implementation;
 using Core.DomainModel.Entities;
-using Core.DomainServices.Repositoy;
+using Core.DomainService.Repositoy;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Test.UnitTest.Common.Models;

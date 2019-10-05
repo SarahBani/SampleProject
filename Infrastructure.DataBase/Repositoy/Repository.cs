@@ -1,5 +1,5 @@
 ﻿using Core.DomainModel.Entities;
-using Core.DomainServices.Repositoy;
+using Core.DomainService.Repositoy;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
