@@ -72,8 +72,8 @@ namespace APIManager.WebAPIGateway
                     ValidateIssuer = true,
                     ValidIssuer = appSettings.Issuer,
                     //ValidateLifetime = true,
-                    //ClockSkew = TimeSpan.Zero,
-                    //RequireExpirationTime = true
+                    ClockSkew = TimeSpan.Zero,
+                    RequireExpirationTime = true
                 };
                 options.Events = new JwtBearerEvents()
                 {

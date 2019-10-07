@@ -14,7 +14,6 @@ namespace Core.DomainModel.Entities
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Country> Countries { get; set; }
-        public DbSet<WebServiceAssignment> WebServiceAssignments { get; set; }
 
         #endregion /Properties
 
@@ -52,7 +51,6 @@ namespace Core.DomainModel.Entities
             modelBuilder.ApplyConfiguration(new CountryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BankEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BranchEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new WebServiceAssignmentEntityTypeConfiguration());
             //modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
             //modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
 

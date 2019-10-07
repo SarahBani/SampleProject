@@ -22,8 +22,6 @@ namespace Core.ApplicationService
 
         public IBranchRepository BranchRepository { get; private set; }
 
-         public IWebServiceAssignmentRepository WebServiceAssignmentRepository { get; private set; }
-
         #endregion /Repositories
 
         #region Services
@@ -70,20 +68,6 @@ namespace Core.ApplicationService
             }
         }
 
-        private IWebServiceAssignmentService _webServiceAssignmentService;
-        public IWebServiceAssignmentService WebServiceAssignmentService
-        {
-            get
-            {
-                if (_webServiceAssignmentService == null)
-                {
-                    _webServiceAssignmentService = new WebServiceAssignmentService(this);
-
-                }
-                return _webServiceAssignmentService;
-            }
-        }
-
         #endregion /Repositories
 
         #endregion /Properties
@@ -93,13 +77,11 @@ namespace Core.ApplicationService
         public EntityService(IReadOnlyRepository<Country, short> countryRepository, 
             IRepository<Bank, int> bankRepository,
             IRepository<Branch, int> branchRepository,
-            IReadOnlyRepository<WebServiceAssignment, short> webServiceAssignment,
             IUnitOfWork unitOfWork)
         {
             this.CountryRepository = (countryRepository as ICountryRepository);
             this.BankRepository = (bankRepository as IBankRepository);
             this.BranchRepository = (branchRepository as IBranchRepository);
-            this.WebServiceAssignmentRepository = (webServiceAssignment as IWebServiceAssignmentRepository);
 
             this.UnitOfWork = unitOfWork;
         }

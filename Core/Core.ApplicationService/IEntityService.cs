@@ -16,15 +16,11 @@ namespace Core.ApplicationService
 
         IBranchRepository BranchRepository { get; }
 
-        IWebServiceAssignmentRepository WebServiceAssignmentRepository { get; }
-
         ICountryService CountryService { get; }
 
         IBankService BankService { get; }
 
         IBranchService BranchService { get; }
-
-        IWebServiceAssignmentService WebServiceAssignmentService { get; }
 
         IReadOnlyRepository<TEntity, TKey> GetRepository<TEntity, TKey>()
             where TEntity : Entity<TKey>;

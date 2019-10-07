@@ -31,17 +31,19 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        public async Task<bool> IsAuthenticated(TokenRequest request)
+        public async Task<bool> IsAuthenticated(UserCredentials  request)
         {
             //var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
             //// return null if user not found
             //if (user == null)
             //    return null;
+
+            // just for now
             return true;
         }
 
-        public string GetAuthenticationToken(TokenRequest request)
+        public string GetAuthenticationToken(UserCredentials  request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._appSettings.SecretKey));

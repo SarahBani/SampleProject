@@ -94,7 +94,7 @@ namespace UserInterface.WebApplication.Controllers
 
         private StringContent GetAuthenticationContent()
         {
-            var tokenRequest = new TokenRequest()
+            var tokenRequest = new UserCredentials ()
             {
                 Username = "Admin",
                 Password = "123"

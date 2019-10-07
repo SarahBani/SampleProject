@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.DomainService.Models
 {
-    public class TokenRequest
+    public class UserCredentials 
     {
 
         [Required(AllowEmptyStrings = false)]
