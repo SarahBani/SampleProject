@@ -1,0 +1,86 @@
+{
+  "ReRoutes": [
+    {
+      // Authentication
+      "DownstreamPathTemplate": "/api/authentication/request",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8001
+        }
+      ],
+      "UpstreamPathTemplate": "/auth",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    // CRUD
+    {
+      "DownstreamPathTemplate": "/api/bank",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/banks",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/{controller}/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/{controller}",
+      "UpstreamHttpMethod": [ "Post", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{controller}/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9001
+        }
+      ],
+      "UpstreamPathTemplate": "/{controller}/{id}",
+      "UpstreamHttpMethod": [ "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "RequestIdKey": "OcRequestId",
+    "AdministrationPath": "/administration"
+  }
+}

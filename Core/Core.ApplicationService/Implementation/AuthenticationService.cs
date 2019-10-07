@@ -44,15 +44,19 @@ namespace Core.ApplicationService.Implementation
         public string GetAuthenticationToken(TokenRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(this._appSettings.SecretKey);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._appSettings.SecretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Issuer = this._appSettings.Issuer,
+                Audience = "crud",
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, "sdfsdf")// user.Id.ToString())
+                    new Claim(ClaimTypes.Name, "crud")// user.Id.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddMinutes(120),
+                SigningCredentials = credentials
             };
             return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }

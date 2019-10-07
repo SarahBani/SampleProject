@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace MicroService.AuthenticationService.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors]
@@ -33,7 +32,6 @@ namespace MicroService.AuthenticationService.Controllers
 
         #region Actions
 
-        [AllowAnonymous]
         [HttpPost, Route("request")]
         public async Task<IActionResult> RequestToken([FromBody] TokenRequest request)
         {

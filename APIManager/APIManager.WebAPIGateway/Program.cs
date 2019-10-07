@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-namespace APIGateway
+namespace APIManager.WebAPIGateway
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args).Build().Run();
@@ -19,6 +14,11 @@ namespace APIGateway
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((host, config) =>
+                {
+                    config.AddJsonFile("configuration.json");
+                })
                 .UseStartup<Startup>();
+
     }
 }
