@@ -21,6 +21,9 @@ So, I decided to make a sample project with the following features:
 
 • JSON Web Token (JWT) authentication 
 
+• Microservices architecture
+
+• Ocelot 
 
 
 I focus on the layers, tools and technologies. 
