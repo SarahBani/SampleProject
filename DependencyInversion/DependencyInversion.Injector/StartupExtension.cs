@@ -8,7 +8,7 @@ using Infrastructure.DataBase;
 using Infrastructure.DataBase.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DependencyInjection.Injector
+namespace DependencyInversion.Injector
 {
     public static class StartupExtension
     {

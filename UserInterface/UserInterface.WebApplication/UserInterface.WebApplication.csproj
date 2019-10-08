@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.ApplicationService\Core.ApplicationService.csproj" />
     <ProjectReference Include="..\..\Core\Core.DomainModel\Core.DomainModel.csproj" />
+    <ProjectReference Include="..\..\DependencyInversion\DependencyInversion.Injector\DependencyInversion.Injector.csproj" />
   </ItemGroup>
 
 </Project>

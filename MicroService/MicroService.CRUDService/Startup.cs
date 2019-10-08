@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
-using DependencyInjection.Injector;
+using DependencyInversion.Injector;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

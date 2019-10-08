@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.DomainModel\Core.DomainModel.csproj" />
     <ProjectReference Include="..\..\Core\Core.DomainService\Core.DomainService.csproj" />
+    <ProjectReference Include="..\..\DependencyInversion\DependencyInversion.Injector\DependencyInversion.Injector.csproj" />
   </ItemGroup>
 
 </Project>

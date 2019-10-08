@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
-using DependencyInjection.Injector;
+using DependencyInversion.Injector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
