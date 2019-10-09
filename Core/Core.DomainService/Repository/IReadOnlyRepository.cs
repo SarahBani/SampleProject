@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Core.DomainService.Repositoy
+namespace Core.DomainService.Repository
 {
     public interface IReadOnlyRepository<TEntity, TKey>
         where TEntity : Entity<TKey>

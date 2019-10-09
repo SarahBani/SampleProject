@@ -1,6 +1,6 @@
 ﻿using Core.DomainModel.Entities;
 using Core.DomainService;
-using Infrastructure.DataBase.Repositoy;
+using Infrastructure.DataBase.Repository;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;

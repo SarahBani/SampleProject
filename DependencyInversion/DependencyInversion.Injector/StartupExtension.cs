@@ -3,7 +3,7 @@ using Core.ApplicationService.Contracts;
 using Core.ApplicationService.Implementation;
 using Core.DomainModel.Entities;
 using Core.DomainService;
-using Core.DomainService.Repositoy;
+using Core.DomainService.Repository;
 using Infrastructure.DataBase;
 using Infrastructure.DataBase.Repository;
 using Microsoft.Extensions.DependencyInjection;

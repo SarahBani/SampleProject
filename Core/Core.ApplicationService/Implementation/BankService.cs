@@ -1,6 +1,6 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel.Entities;
-using Core.DomainService.Repositoy;
+using Core.DomainService.Repository;
 using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Implementation

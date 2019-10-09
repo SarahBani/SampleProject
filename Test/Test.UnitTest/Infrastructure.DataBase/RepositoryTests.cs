@@ -1,5 +1,5 @@
 ﻿using Core.DomainModel.Entities;
-using Infrastructure.DataBase.Repositoy;
+using Infrastructure.DataBase.Repository;
 using Moq;
 using NUnit.Framework;
 using System;

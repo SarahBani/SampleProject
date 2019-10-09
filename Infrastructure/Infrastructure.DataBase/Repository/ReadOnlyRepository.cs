@@ -1,13 +1,13 @@
 ﻿using Core.DomainModel.Entities;
 using Core.DomainService;
-using Core.DomainService.Repositoy;
+using Core.DomainService.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Infrastructure.DataBase.Repositoy
+namespace Infrastructure.DataBase.Repository
 {
     public abstract class ReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey>
         where TEntity : Entity<TKey>

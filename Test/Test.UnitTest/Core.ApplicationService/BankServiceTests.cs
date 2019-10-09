@@ -2,7 +2,7 @@
 using Core.DomainModel;
 using Core.DomainModel.Entities;
 using Core.DomainService;
-using Core.DomainService.Repositoy;
+using Core.DomainService.Repository;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;

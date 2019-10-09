@@ -1,6 +1,5 @@
 ﻿using Core.DomainModel.Entities;
-using Core.DomainService.Repositoy;
-using Infrastructure.DataBase.Repositoy;
+using Core.DomainService.Repository;
 
 namespace Infrastructure.DataBase.Repository
 {

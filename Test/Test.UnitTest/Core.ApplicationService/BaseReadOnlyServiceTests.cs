@@ -1,7 +1,7 @@
 ﻿using Core.ApplicationService;
 using Core.ApplicationService.Implementation;
 using Core.DomainModel.Entities;
-using Core.DomainService.Repositoy;
+using Core.DomainService.Repository;
 using Moq;
 using NUnit.Framework;
 using System;
