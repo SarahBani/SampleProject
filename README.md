@@ -11,6 +11,12 @@ So, I decided to make a sample project with the following features:
 
 • WebAPI 
 
+• Microservices architecture
+
+• Ocelot 
+
+• JSON Web Token (JWT) authentication 
+
 • SQL Server 
 
 • Entity Framework (Code First)
@@ -18,13 +24,6 @@ So, I decided to make a sample project with the following features:
 • TDD 
 
 • Unit Testing
-
-• JSON Web Token (JWT) authentication 
-
-• Microservices architecture
-
-• Ocelot 
-
 
 I focus on the layers, tools and technologies. 
 The domain is totally simple and contains only simple tables. 
