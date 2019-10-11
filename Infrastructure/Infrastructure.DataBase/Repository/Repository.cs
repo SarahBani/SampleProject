@@ -27,18 +27,18 @@ namespace Infrastructure.DataBase.Repository
 
         public virtual void Insert(TEntity entity)
         {
-            this.MyDBContext.Add(entity);
+            base.MyDBContext.Add(entity);
         }
 
         public virtual async Task InsertAsync(TEntity entity)
         {
-            await this.MyDBContext.AddAsync(entity);
+            await base.MyDBContext.AddAsync(entity);
         }
 
         public virtual void Update(TEntity entity)
         {
-            this.MyDBContext.Attach(entity);
-            this.MyDBContext.SetModified(entity);
+            base.MyDBContext.Attach(entity);
+            base.MyDBContext.SetModified(entity);
         }
 
         public virtual void Delete(TKey id)
@@ -50,14 +50,14 @@ namespace Infrastructure.DataBase.Repository
 
         public virtual void Delete(TEntity entity)
         {
-            this.MyDBContext.Attach(entity);
-            this.MyDBContext.Remove(entity);
+            base.MyDBContext.Attach(entity);
+            base.MyDBContext.Remove(entity);
         }
 
         public virtual void Delete(Expression<Func<TEntity, bool>> filter = null)
         {
             var entities = base.GetEnumerable(filter);
-            this.MyDBContext.RemoveRange(entities);
+            base.MyDBContext.RemoveRange(entities);
         }
 
         #endregion /Methods

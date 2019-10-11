@@ -13,13 +13,13 @@ namespace Infrastructure.DataBase
 
         private string _transactionName;
 
-        private SampleDataBaseContext _dbContext;
+        private ManufacturingDbContext _dbContext;
 
         #endregion /Properties
 
         #region Constructors
 
-        public UnitOfWork(SampleDataBaseContext  dbContext)
+        public UnitOfWork(ManufacturingDbContext dbContext)
         {
             this._dbContext = dbContext;
         }
