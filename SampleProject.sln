@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.DataBase", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInversion.Injector", "DependencyInversion\DependencyInversion.Injector\DependencyInversion.Injector.csproj", "{86EA095F-2717-464A-8CC2-ED3FCC9451CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Common", "Test\Test.Common\Test.Common.csproj", "{B2C7246E-C70C-4CFF-BDD0-5CCA12077644}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{86EA095F-2717-464A-8CC2-ED3FCC9451CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86EA095F-2717-464A-8CC2-ED3FCC9451CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86EA095F-2717-464A-8CC2-ED3FCC9451CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C7246E-C70C-4CFF-BDD0-5CCA12077644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C7246E-C70C-4CFF-BDD0-5CCA12077644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C7246E-C70C-4CFF-BDD0-5CCA12077644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C7246E-C70C-4CFF-BDD0-5CCA12077644}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +123,7 @@ Global
 		{73AC12EC-3B55-4802-87DE-5FF790E92C9C} = {EBB93C37-CBA2-4DE1-947B-A1DCFED2DCEC}
 		{5599007E-DA72-416F-96DB-A3335B447ECF} = {F196762D-D1FC-457D-88F7-B2783BC5F44B}
 		{86EA095F-2717-464A-8CC2-ED3FCC9451CE} = {81118FB1-53EC-4F7F-B423-1E9018AB95FA}
+		{B2C7246E-C70C-4CFF-BDD0-5CCA12077644} = {3AC6E43E-83E8-4159-9883-1C3C2E951ACC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D29A92EA-809F-4DEC-80B0-36DD5F4B97BE}

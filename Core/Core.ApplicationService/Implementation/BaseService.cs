@@ -58,20 +58,20 @@ namespace Core.ApplicationService.Implementation
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected void BeginTransaction()
         {
-            //if (string.IsNullOrEmpty(this.UnitOfWork.GetTransactionName()))
-            //{            
-            base.EntityService.UnitOfWork.BeginTransaction(GetCallerMethod());
-            //}
+            if (!base.EntityService.UnitOfWork.HasTransaction())
+            {
+                base.EntityService.UnitOfWork.BeginTransaction(GetCallerMethod());
+            }
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        protected async Task<TransactionResult> CommitTransactionAsync()
+        protected async Task<TransactionResult> CommitTransactionAsync(object content = null)
         {
             if (base.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
             {
                 await base.EntityService.UnitOfWork.Commit();
             }
-            return new TransactionResult();
+            return new TransactionResult(content);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -79,11 +79,12 @@ namespace Core.ApplicationService.Implementation
         {
             int intSkipFrames = 0;
             while (new StackFrame(intSkipFrames).GetMethod().GetMethodImplementationFlags() == MethodImplAttributes.NoInlining ||
-                   !new StackFrame(intSkipFrames).GetMethod().DeclaringType.BaseType.Name.Equals(typeof(BaseReadOnlyService<,,>).Name))
+                   new StackFrame(intSkipFrames).GetMethod().GetRealMethod() == null ||
+                   !new StackFrame(intSkipFrames).GetMethod().GetBaseDeclaringType().IsAssignedGenericType(typeof(BaseService<,,>))) // This line is added for preventing mistakes in tests
             {
                 intSkipFrames++;
             }
-            var method = new StackTrace(new StackFrame(intSkipFrames)).GetFrame(0).GetMethod();
+            var method = new StackTrace(new StackFrame(intSkipFrames)).GetFrame(0).GetMethod().GetRealMethod();
             return method.ReflectedType.Name + "." + method.Name;
         }
 

@@ -7,6 +7,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Test.Common;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -47,7 +49,7 @@ namespace Test.UnitTest.Core.ApplicationService
             this.EntityServiceMock.Setup(q => q.GetRepository<TEntity, TKey>()).Returns(this.RepositoryMock.Object);
         }
 
-        [SetUp]
+        [OneTimeSetUp]
         public abstract void Setup();
 
         protected void SetService<T>() where T : BaseReadOnlyService<TRepository, TEntity, TKey>
@@ -58,14 +60,14 @@ namespace Test.UnitTest.Core.ApplicationService
         #region GetByIdAsync
 
         [Test]
-        public void GetByIdAsync_ReturnsOK()
+        public async Task GetByIdAsync_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             this.RepositoryMock.Setup(q => q.GetByIdAsync(entity.Id)).ReturnsAsync(entity);
 
             //Act
-            var result = this.Service.GetByIdAsync(entity.Id).Result;
+            var result =await this.Service.GetByIdAsync(entity.Id);
 
             // Assert
             Assert.IsInstanceOf<TEntity>(result);
@@ -75,15 +77,15 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void GetByIdAsync_IdIs0_ReturnsNull()
+        public async Task GetByIdAsync_IdIs0_ReturnsNull()
         {
             // Arrange
             TEntity entity = null;
-            TKey id = (TKey)Convert.ChangeType(0, typeof(TKey));
+            TKey id = TestHelper.GetId<TKey>(0);
             this.RepositoryMock.Setup(q => q.GetByIdAsync(id)).ReturnsAsync(entity);
 
             //Act
-            var result = this.Service.GetByIdAsync(id).Result;
+            var result =await this.Service.GetByIdAsync(id);
 
             // Assert
             this.RepositoryMock.Verify(q => q.GetByIdAsync(id),
@@ -96,14 +98,14 @@ namespace Test.UnitTest.Core.ApplicationService
         #region GetCountAsync
 
         [Test]
-        public void GetCountAsync_ReturnsOK()
+        public async Task GetCountAsync_ReturnsOK()
         {
             // Arrange
             int count = 3;
             this.RepositoryMock.Setup(q => q.GetCountAsync(null)).ReturnsAsync(count);
 
             //Act
-            var result = this.Service.GetCountAsync().Result;
+            var result =await this.Service.GetCountAsync();
 
             // Assert
             this.RepositoryMock.Verify(q => q.GetCountAsync(null),
@@ -116,14 +118,14 @@ namespace Test.UnitTest.Core.ApplicationService
         #region GetAllAsync
 
         [Test]
-        public void GetAllAsync_ReturnsOK()
+        public async Task GetAllAsync_ReturnsOK()
         {
             // Arrange
-            var entityList = EntityList;
+            var entityList = this.EntityList;
             this.RepositoryMock.Setup(q => q.GetQueryableAsync()).ReturnsAsync(entityList.AsQueryable());
 
             //Act
-            var result = this.Service.GetAllAsync().Result;
+            var result =await this.Service.GetAllAsync();
 
             // Assert            
             Assert.IsInstanceOf<IList<TEntity>>(result);

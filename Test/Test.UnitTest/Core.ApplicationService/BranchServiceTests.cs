@@ -6,7 +6,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Test.UnitTest.Common.Models;
+using System.Threading.Tasks;
+using Test.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -44,14 +45,14 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public override void Setup()
         {
             base.SetService<BranchService>();
         }
 
         [Test]
-        public void GetCountByBankIdAsync_ReturnsOK()
+        public async Task GetCountByBankIdAsync_ReturnsOK()
         {
             // Arrange
             int count = 3;
@@ -60,7 +61,7 @@ namespace Test.UnitTest.Core.ApplicationService
             base.RepositoryMock.Setup(x => x.GetCountAsync(expression)).ReturnsAsync(count);
 
             //Act
-            var result = this.Service.GetCountByBankIdAsync(bankId).Result;
+            var result = await this.Service.GetCountByBankIdAsync(bankId);
 
             // Assert
             base.RepositoryMock.Verify(q => q.GetCountAsync(expression),
@@ -69,7 +70,7 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void GetCountByBankIdAsync_BankIdIsInvalid_ReturnsZero()
+        public async Task GetCountByBankIdAsync_BankIdIsInvalid_ReturnsZero()
         {
             // Arrange
             int count = 0;
@@ -88,17 +89,17 @@ namespace Test.UnitTest.Core.ApplicationService
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
-        public void GetListByBankIdAsync_ReturnsOK()
+        public async Task GetListByBankIdAsync_ReturnsOK()
         {
             // Arrange
-            var entityList = EntityList;
+            var entityList = this.EntityList;
             int bankId = 5;
             var expression = It.IsAny<Expression<Func<Branch, bool>>>();
             base.RepositoryMock.Setup(q => q.GetEnumerableAsync(expression, null, null))
                 .ReturnsAsync(entityList);
 
             //Act
-            var result = this.Service.GetListByBankIdAsync(bankId).Result;
+            var result = await this.Service.GetListByBankIdAsync(bankId);
 
             // Assert
             base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null),
@@ -106,7 +107,7 @@ namespace Test.UnitTest.Core.ApplicationService
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }
 
-        public void GetListByBankIdAsync_BankIdIsInvalid_ReturnsNoItem()
+        public async Task GetListByBankIdAsync_BankIdIsInvalid_ReturnsNoItem()
         {
             // Arrange
             var entityList = new List<Branch>();
@@ -116,7 +117,7 @@ namespace Test.UnitTest.Core.ApplicationService
                 .ReturnsAsync(entityList);
 
             //Act
-            var result = this.Service.GetListByBankIdAsync(bankId).Result;
+            var result = await this.Service.GetListByBankIdAsync(bankId);
 
             // Assert
             base.RepositoryMock.Verify(q => q.GetEnumerableAsync(expression, null, null),

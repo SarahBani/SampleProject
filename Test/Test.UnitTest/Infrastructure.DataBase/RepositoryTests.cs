@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Test.UnitTest.Infrastructure.DataBase
 {
@@ -33,43 +34,43 @@ namespace Test.UnitTest.Infrastructure.DataBase
         #region Methods  
 
         [Test]
-        public void Insert_ReturnsOK()
+        public async Task Insert_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.Add(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            this.Repository.Insert(entity);
+            await Task.Run(() => this.Repository.Insert(entity));
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Add(It.IsAny<TEntity>()), "error in calling the correct method");
         }
 
         [Test]
-        public void InsertAsync_ReturnsOK()
+        public async Task InsertAsync_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.AddAsync(It.IsAny<TEntity>(), default)).Verifiable();
 
             //Act
-            var _ = this.Repository.InsertAsync(entity);
+            await this.Repository.InsertAsync(entity);
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.AddAsync(It.IsAny<TEntity>(), default), "error in calling the correct method");
         }
 
         [Test]
-        public void Update_ReturnsOK()
+        public async Task Update_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.Attach(It.IsAny<TEntity>())).Verifiable();
             this.DataBaseContextMock.Setup(q => q.SetModified(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            this.Repository.Update(entity);
+            await Task.Run(() => this.Repository.Update(entity));
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Attach(It.IsAny<TEntity>()), "error in calling the correct method");
@@ -79,15 +80,15 @@ namespace Test.UnitTest.Infrastructure.DataBase
         #region Delete
 
         [Test]
-        public void Delete_ById_ReturnsOK()
+        public async Task Delete_ById_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.Attach(It.IsAny<TEntity>())).Verifiable();
             base.DataBaseContextMock.Setup(q => q.Remove(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            this.Repository.Delete(entity.Id);
+            await Task.Run(() => this.Repository.Delete(entity.Id));
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Attach(It.IsAny<TEntity>()), "error in calling the correct method");
@@ -95,15 +96,15 @@ namespace Test.UnitTest.Infrastructure.DataBase
         }
 
         [Test]
-        public void Delete_ByEntity_ReturnsOK()
+        public async Task Delete_ByEntity_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.Attach(It.IsAny<TEntity>())).Verifiable();
             base.DataBaseContextMock.Setup(q => q.Remove(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            this.Repository.Delete(entity);
+            await Task.Run(() => this.Repository.Delete(entity));
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Attach(It.IsAny<TEntity>()), "error in calling the correct method");
@@ -111,7 +112,7 @@ namespace Test.UnitTest.Infrastructure.DataBase
         }
 
         [Test]
-        public void Delete_ByFilter_ReturnsOK()
+        public async Task Delete_ByFilter_ReturnsOK()
         {
             // Arrange
             Expression<Func<TEntity, bool>> filter = q => long.Parse(q.Id.ToString()) >= 3;
@@ -121,7 +122,7 @@ namespace Test.UnitTest.Infrastructure.DataBase
             base.DataBaseContextMock.Setup(q => q.RemoveRange(It.IsAny<IEnumerable<TEntity>>())).Verifiable();
 
             //Act
-            this.Repository.Delete(filter);
+            await Task.Run(() => this.Repository.Delete(filter));
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");

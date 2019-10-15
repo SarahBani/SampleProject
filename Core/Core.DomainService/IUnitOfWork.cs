@@ -11,6 +11,8 @@ namespace Core.DomainService
 
         void BeginTransaction(string transactionName);
 
+        bool HasTransaction();
+
         Task Commit();
 
         void RollBack();

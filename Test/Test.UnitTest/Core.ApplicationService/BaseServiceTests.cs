@@ -4,7 +4,7 @@ using Core.DomainService;
 using Core.DomainService.Repository;
 using Moq;
 using NUnit.Framework;
-using System;
+using System.Threading.Tasks;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -42,14 +42,14 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void InsertAsync_ReturnsOK()
+        public async Task InsertAsync_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.RepositoryMock.Setup(q => q.InsertAsync(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            var result = this.Service.InsertAsync(entity).Result;
+            var result = await this.Service.InsertAsync(entity);
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
@@ -59,14 +59,14 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void UpdateAsync_ReturnsOK()
+        public async Task UpdateAsync_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.RepositoryMock.Setup(q => q.Update(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            var result = this.Service.UpdateAsync(entity).Result;
+            var result = await this.Service.UpdateAsync(entity);
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
@@ -76,14 +76,14 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void DeleteAsync_ById_ReturnsOK()
+        public async Task DeleteAsync_ById_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.RepositoryMock.Setup(q => q.Delete(entity.Id)).Verifiable();
 
             //Act
-            var result = this.Service.DeleteAsync(entity.Id).Result;
+            var result = await this.Service.DeleteAsync(entity.Id);
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
@@ -93,18 +93,18 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void DeleteAsync_ByEntity_ReturnsOK()
+        public async Task DeleteAsync_ByEntity_ReturnsOK()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             base.RepositoryMock.Setup(q => q.Delete(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            var result = this.Service.DeleteAsync(entity).Result;
+            var result = await this.Service.DeleteAsync(entity);
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
-            base.RepositoryMock.Verify(q => q.Delete(It.IsAny<TEntity>()), 
+            base.RepositoryMock.Verify(q => q.Delete(It.IsAny<TEntity>()),
                 "error in calling the correct method");  // Verifies that Repository.DeleteAsync was called
             Assert.AreEqual(true, result.IsSuccessful, "error in returning correct TransactionResult");
         }

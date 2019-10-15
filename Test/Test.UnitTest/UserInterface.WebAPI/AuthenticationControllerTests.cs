@@ -9,7 +9,8 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Test.UnitTest.Infrastructure.Common;
+using System.Threading.Tasks;
+using Test.Common;
 
 namespace Test.UnitTest.UserInterface.WebAPI
 {
@@ -44,7 +45,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
         }
 
         [Test]
-        public void RequestToken_ReturnsOK()
+        public async Task RequestToken_ReturnsOK()
         {
             // Arrange
             var request = new UserCredentials ()
@@ -58,18 +59,18 @@ namespace Test.UnitTest.UserInterface.WebAPI
             this._authServiceMock.Setup(q => q.GetAuthenticationToken(request)).Returns(authenticationToken);
 
             //Act
-            var result = this._controller.RequestToken(request).Result;
+            var result = await this._controller.RequestToken(request);
 
             // Assert
             this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredentials >()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
             this._authServiceMock.Verify(q => q.GetAuthenticationToken(It.IsAny<UserCredentials >()),
                 "error in calling the correct method");  // Verifies that authService.GetAuthenticationToken was called
-            AssertHelper.AreEqualEntities(expectedResult, result, "error in returning the correct authentication token");
+            TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct authentication token");
         }
 
         [Test]
-        public void RequestToken_InvalidTokenRequest_ReturnsBadRequest()
+        public async Task RequestToken_InvalidTokenRequest_ReturnsBadRequest()
         {
             // Arrange
             var request = new UserCredentials ()
@@ -83,14 +84,14 @@ namespace Test.UnitTest.UserInterface.WebAPI
             var expectedResult = new BadRequestObjectResult(this._controller.ModelState);
 
             //Act
-            var result = this._controller.RequestToken(request).Result;
+            var result = await this._controller.RequestToken(request);
 
             // Assert
-            AssertHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
+            TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
         }
 
         [Test]
-        public void RequestToken_NotAuthenticatedUser_ReturnsBadRequest()
+        public async Task RequestToken_NotAuthenticatedUser_ReturnsBadRequest()
         {
             // Arrange
             var request = new UserCredentials ()
@@ -104,12 +105,12 @@ namespace Test.UnitTest.UserInterface.WebAPI
             this._authServiceMock.Setup(q => q.GetAuthenticationToken(request)).Returns(authenticationToken);
 
             //Act
-            var result = this._controller.RequestToken(request).Result;
+            var result =await this._controller.RequestToken(request);
 
             // Assert
             this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredentials >()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
-            AssertHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
+            TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
         }
 
         #endregion /Methods

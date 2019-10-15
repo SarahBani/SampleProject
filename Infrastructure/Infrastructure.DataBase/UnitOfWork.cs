@@ -13,13 +13,13 @@ namespace Infrastructure.DataBase
 
         private string _transactionName;
 
-        private ManufacturingDbContext _dbContext;
+        private SampleDataBaseContext _dbContext;
 
         #endregion /Properties
 
         #region Constructors
 
-        public UnitOfWork(ManufacturingDbContext dbContext)
+        public UnitOfWork(SampleDataBaseContext dbContext)
         {
             this._dbContext = dbContext;
         }
@@ -40,6 +40,11 @@ namespace Infrastructure.DataBase
         public string GetTransactionName()
         {
             return this._transactionName;
+        }
+
+        public bool HasTransaction()
+        {
+            return !string.IsNullOrEmpty(this._transactionName);
         }
 
         public void BeginTransaction(string transactionName)

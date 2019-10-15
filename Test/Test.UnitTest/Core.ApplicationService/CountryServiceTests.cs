@@ -3,7 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainService.Repository;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Test.UnitTest.Common.Models;
+using Test.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -41,7 +41,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public override void Setup()
         {
             base.SetService<CountryService>();

@@ -6,9 +6,9 @@ using Core.DomainService.Repository;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Test.UnitTest.Common;
-using Test.UnitTest.Common.Models;
-using Test.UnitTest.Infrastructure.Common;
+using System.Threading.Tasks;
+using Test.Common;
+using Test.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -46,30 +46,30 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public override void Setup()
         {
             base.SetService<BankService>();
         }
 
         [Test]
-        public void InsertAsync_DuplicateName_ReturnsDuplicateException()
+        public async Task InsertAsync_DuplicateName_ReturnsDuplicateException()
         {
             // Arrange
-            var entity = Entity;
+            var entity = this.Entity;
             var exceptionKey = ExceptionKey.RecordAlreadyExsits;
             var expectedResult = new TransactionResult(new CustomException(exceptionKey));
             base.RepositoryMock.Setup(q => q.InsertAsync(It.IsAny<Bank>()))
                 .Throws(SqlExceptionGenerator.CreateSqlException((int)exceptionKey));
 
             //Act
-            var result = this.Service.InsertAsync(entity).Result;
+            var result = await this.Service.InsertAsync(entity);
 
             // Assert
             Assert.IsInstanceOf<TransactionResult>(result);
             base.RepositoryMock.Verify(q => q.InsertAsync(It.IsAny<Bank>()),
                 "error in calling the correct method");  // Verifies that Repository.InsertAsync was called
-            AssertHelper.AreEqualEntities(expectedResult, result, "error in raising the correct exception");
+            TestHelper.AreEqualEntities(expectedResult, result, "error in raising the correct exception");
         }
 
         #endregion /Methods

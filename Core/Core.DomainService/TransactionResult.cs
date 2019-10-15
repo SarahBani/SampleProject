@@ -13,6 +13,8 @@ namespace Core.DomainService
 
         public ExceptionKey ExceptionKey { get; set; }
 
+        public object Content { get; private set; }
+
         #endregion /Properties
 
         #region Constructors
@@ -21,6 +23,11 @@ namespace Core.DomainService
         {
             this.IsSuccessful = true;
             this.ExceptionContentResult = string.Empty;
+        }
+
+        public TransactionResult(object content) : this()
+        {
+            this.Content = content;
         }
 
         public TransactionResult(CustomException exception)

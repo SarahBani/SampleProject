@@ -4,6 +4,7 @@ using Core.DomainService.Settings;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -29,7 +30,7 @@ namespace Test.UnitTest.Core.ApplicationService
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             this._appSettingsMock = new Mock<IOptions<AuthenticationAppSettings>>();
@@ -37,20 +38,18 @@ namespace Test.UnitTest.Core.ApplicationService
             this._service = new AuthenticationService(this._appSettingsMock.Object);
         }
 
-        #endregion /Methods
-
         [Test]
-        public void IsAuthenticated_ReturnsOK()
+        public async Task IsAuthenticated_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredentials ()
+            var request = new UserCredentials()
             {
                 Username = "User",
                 Password = "123"
             };
 
             //Act
-            var result = _service.IsAuthenticated(request).Result;
+            var result = await this._service.IsAuthenticated(request);
 
             // Assert
             //base.RepositoryMock.Verify(q => q.GetCountAsync(expression),
@@ -59,21 +58,23 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public void GetAuthenticationToken_ReturnsOK()
+        public async Task GetAuthenticationToken_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredentials ()
+            var request = new UserCredentials()
             {
                 Username = "User",
                 Password = "123"
             };
 
             //Act
-            var result = _service.GetAuthenticationToken(request);
+            var result = await Task.Run(() => this._service.GetAuthenticationToken(request));
 
             // Assert
             Assert.AreNotEqual(string.Empty, result, "error in returning a valid token");
         }
+
+        #endregion /Methods
 
     }
 }

@@ -2,7 +2,7 @@
 using Core.DomainModel.Entities;
 using Infrastructure.DataBase.Repository;
 using NUnit.Framework;
-using Test.UnitTest.Common.Models;
+using Test.Common.Models;
 
 namespace Test.UnitTest.Infrastructure.DataBase
 {
@@ -35,7 +35,7 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public override void Setup()
         {
             base.SetRepository<BranchRepository>();
