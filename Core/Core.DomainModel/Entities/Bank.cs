@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.DomainModel.Entities
 {
@@ -14,7 +15,9 @@ namespace Core.DomainModel.Entities
 
         #region Properties
 
+        [Required]
         public string Name { get; set; }
+
         public Grade? Grade { get; set; }
 
         public ICollection<Branch> Branches { get; set; }

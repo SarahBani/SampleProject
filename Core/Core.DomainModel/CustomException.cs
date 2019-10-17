@@ -27,7 +27,7 @@ namespace Core.DomainModel
         UserHasBlocked,
         NeedLogin,
         ImpossibleOperation,
-        [Description(Constant.Invalid_Address_City_Required)]
+        [Description(Constant.Validation_Address_City_Required)]
         Invalid_Address_City_Required,
 
         InvalidWebServiceAssignmentToken,

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.DomainModel.Entities
 {
@@ -8,9 +9,15 @@ namespace Core.DomainModel.Entities
 
         #region Properties
 
+        [Required]
         public int BankId { get; set; }
+
+        [Required]
         public int Code { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
         public Address Address { get; set; }
 
         public virtual Bank Bank { get; set; }

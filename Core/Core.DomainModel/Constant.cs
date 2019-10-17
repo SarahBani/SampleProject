@@ -15,7 +15,8 @@
 
         #region Validations
 
-        public const string Invalid_Address_City_Required = "The address in city is required!";
+        public const string Validation_Address_City_Required = "The address in city is required!";
+        public const string Validation_RequiredField = "The {0} field is required.";
 
         #endregion /Validations
 
@@ -36,11 +37,11 @@
         public const string Exception_sql_HasDuplicateInfo = "The record has duplicate information!";
         public const string Exception_sql_ArithmeticOverflow = "The record field value is too big!";
 
-        public const string InvalidWebServiceAssignmentToken = "Token is invalid!";
-        public const string WebServiceAssignmentExpired = "Your token has been expired!";
-        public const string InvalidAuthentication = "The authentication is invalid!";
+        public const string Exception_InvalidWebServiceAssignmentToken = "Token is invalid!";
+        public const string Exception_WebServiceAssignmentExpired = "Your token has been expired!";
+        public const string Exception_InvalidAuthentication = "The authentication is invalid!";
 
-        #endregion /Exceptions
+        #endregion /Exceptions        
 
     }
 }

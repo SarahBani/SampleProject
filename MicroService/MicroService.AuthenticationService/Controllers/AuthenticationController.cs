@@ -44,7 +44,7 @@ namespace MicroService.AuthenticationService.Controllers
                 string token = _authService.GetAuthenticationToken(request);
                 return Ok(token);
             }
-            return BadRequest(Constant.InvalidAuthentication);
+            return BadRequest(Constant.Exception_InvalidAuthentication);
         }
 
         //    private async Task<string> GenerateJwtToken(User user)

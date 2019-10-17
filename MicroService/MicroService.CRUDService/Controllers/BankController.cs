@@ -51,6 +51,10 @@ namespace MicroService.CRUDService
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody]Bank bank)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             TransactionResult result;
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -71,24 +75,28 @@ namespace MicroService.CRUDService
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Bank bank)
         {
-            if (bank != null)
+            if (bank == null)
             {
-                TransactionResult result;
-                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                return new NoContentResult();
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            TransactionResult result;
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                result = await this._bankService.UpdateAsync(bank);
+                if (result.IsSuccessful)
                 {
-                    result = await this._bankService.UpdateAsync(bank);
-                    if (result.IsSuccessful)
-                    {
-                        scope.Complete();
-                        return new OkResult();
-                    }
-                    else
-                    {
-                        return BadRequest(result.ExceptionContentResult);
-                    }
+                    scope.Complete();
+                    return new OkResult();
+                }
+                else
+                {
+                    return BadRequest(result.ExceptionContentResult);
                 }
             }
-            return new NoContentResult();
         }
 
         // DELETE: api/Bank/5

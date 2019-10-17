@@ -15,10 +15,4 @@
     <ProjectReference Include="..\..\Infrastructure\Infrastructure.DataBase\Infrastructure.DataBase.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInversion.Abstractions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.DomainModel.Entities
 {
@@ -7,11 +8,19 @@ namespace Core.DomainModel.Entities
 
         #region Properties
 
+        [Required]
         public string CityName { get; private set; }
+
+        [Required]
         public string Street { get; private set; }
+
+        [Required]
         public string BlockNo { get; private set; }
+
+        [Required]
         public string PostalCode { get; private set; }
 
+        [Required]
         public virtual Country Country { get; private set; }
 
         #endregion /Properties

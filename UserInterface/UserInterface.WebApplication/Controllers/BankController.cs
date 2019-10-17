@@ -94,12 +94,12 @@ namespace UserInterface.WebApplication.Controllers
 
         private StringContent GetAuthenticationContent()
         {
-            var tokenRequest = new UserCredential()
+            var userCredential = new UserCredential()
             {
                 Username = "Admin",
                 Password = "123"
             };
-            string serializedContent = JsonConvert.SerializeObject(tokenRequest);
+            string serializedContent = JsonConvert.SerializeObject(userCredential);
             return new StringContent(serializedContent, Encoding.UTF8, "application/json");
         }
 

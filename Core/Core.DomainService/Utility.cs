@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq.Expressions;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Core.DomainService
 {
@@ -35,7 +36,7 @@ namespace Core.DomainService
             }
             else
             {
-               return query.OrderByDescending(expression);
+                return query.OrderByDescending(expression);
             }
         }
 
@@ -117,6 +118,12 @@ namespace Core.DomainService
                 return content.Replace("\r\n", "<br />");
             }
             return content;
+        }
+
+        public static ModelStateDictionary AddModelRequiredError(this ModelStateDictionary modelState, string key)
+        {
+            modelState.AddModelError(key, string.Format(Constant.Validation_RequiredField, key));
+            return modelState;
         }
 
         //#region Error Handling

@@ -89,7 +89,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
             // Arrange
             var request = new UserCredentialModel().NotAuthenticatedEntity;
             string authenticationToken = "sample_authentication_token";
-            var expectedResult = new BadRequestObjectResult(Constant.InvalidAuthentication);
+            var expectedResult = new BadRequestObjectResult(Constant.Exception_InvalidAuthentication);
             this._authServiceMock.Setup(q => q.IsAuthenticated(request)).ReturnsAsync(false);
             this._authServiceMock.Setup(q => q.GetAuthenticationToken(request)).Returns(authenticationToken);
 
