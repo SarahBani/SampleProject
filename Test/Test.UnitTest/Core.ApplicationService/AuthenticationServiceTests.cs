@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using Test.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
 {
@@ -42,11 +43,7 @@ namespace Test.UnitTest.Core.ApplicationService
         public async Task IsAuthenticated_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredential()
-            {
-                Username = "User",
-                Password = "123"
-            };
+            var request = new UserCredentialModel().Entity;
 
             //Act
             var result = await this._service.IsAuthenticated(request);
@@ -61,11 +58,7 @@ namespace Test.UnitTest.Core.ApplicationService
         public async Task GetAuthenticationToken_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredential()
-            {
-                Username = "User",
-                Password = "123"
-            };
+            var request = new UserCredentialModel().Entity;
 
             //Act
             var result = await Task.Run(() => this._service.GetAuthenticationToken(request));

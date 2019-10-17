@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Test.Common;
+using Test.Common.Models;
 
 namespace Test.UnitTest.UserInterface.WebAPI
 {
@@ -37,7 +38,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
 
         #region Methods
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             this._authServiceMock = new Mock<IAuthenticationService>();
@@ -48,11 +49,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
         public async Task RequestToken_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredential ()
-            {
-                Username = "User",
-                Password = "123"
-            };
+            var request = new UserCredentialModel().Entity;
             string authenticationToken = "sample_authentication_token";
             var expectedResult = new OkObjectResult(authenticationToken);
             this._authServiceMock.Setup(q => q.IsAuthenticated(request)).ReturnsAsync(true);
@@ -62,22 +59,18 @@ namespace Test.UnitTest.UserInterface.WebAPI
             var result = await this._controller.RequestToken(request);
 
             // Assert
-            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential >()),
+            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential>()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
-            this._authServiceMock.Verify(q => q.GetAuthenticationToken(It.IsAny<UserCredential >()),
+            this._authServiceMock.Verify(q => q.GetAuthenticationToken(It.IsAny<UserCredential>()),
                 "error in calling the correct method");  // Verifies that authService.GetAuthenticationToken was called
             TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct authentication token");
         }
 
         [Test]
-        public async Task RequestToken_InvalidTokenRequest_ReturnsBadRequest()
+        public async Task RequestToken_InvalidUserCredential_ReturnsBadRequest()
         {
             // Arrange
-            var request = new UserCredential ()
-            {
-                Username = null,
-                Password = "123"
-            };
+            var request = new UserCredentialModel().NullUserNameEntity;
             new DataAnnotationsValidator().TryValidate(request, out ICollection<ValidationResult> modelState);
             var validationResult = modelState.First();
             this._controller.ModelState.AddModelError(validationResult.MemberNames.First(), validationResult.ErrorMessage);
@@ -94,21 +87,17 @@ namespace Test.UnitTest.UserInterface.WebAPI
         public async Task RequestToken_NotAuthenticatedUser_ReturnsBadRequest()
         {
             // Arrange
-            var request = new UserCredential ()
-            {
-                Username = "User",
-                Password = "123"
-            };
+            var request = new UserCredentialModel().NotAuthenticatedEntity;
             string authenticationToken = "sample_authentication_token";
             var expectedResult = new BadRequestObjectResult(Constant.InvalidAuthentication);
             this._authServiceMock.Setup(q => q.IsAuthenticated(request)).ReturnsAsync(false);
             this._authServiceMock.Setup(q => q.GetAuthenticationToken(request)).Returns(authenticationToken);
 
             //Act
-            var result =await this._controller.RequestToken(request);
+            var result = await this._controller.RequestToken(request);
 
             // Assert
-            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential >()),
+            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential>()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
             TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
         }
