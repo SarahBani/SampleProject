@@ -51,7 +51,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PostAsync_NullUserName_ReturnsValidationException()
+        public async Task PostAsync_NullUserName_ReturnsBadRequestValidationException()
         {
             // Arrange
             var userCredential = new UserCredentialModel().NullUserNameEntity;
@@ -70,7 +70,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PostAsync_NullPassword_ReturnsValidationException()
+        public async Task PostAsync_NullPassword_ReturnsBadRequestValidationException()
         {
             // Arrange
             var userCredential = new UserCredentialModel().NullPasswordEntity;

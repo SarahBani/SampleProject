@@ -36,6 +36,11 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
 
         private readonly string _deleteBankUrl = "/bank/{0}";
 
+        protected Bank Entity
+        {
+            get => new BankModel().Entity;
+        }
+
         #endregion /Properties
 
         #region Constructors
@@ -131,7 +136,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task PostAsync_Bank_ReturnsOK()
         {
             // Arrange
-            var bank = new BankModel().Entity;
+            var bank = this.Entity;
             bank.Id = 0;
             bank.Name = Guid.NewGuid().ToString(); // make the bank name unique to prevent index error
             var content = base.GetSerializedContent(bank);
@@ -148,7 +153,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PostAsync_BankNull_ReturnsValidationException()
+        public async Task PostAsync_BankNull_ReturnsBadRequestValidationException()
         {
             // Arrange
             Bank bank = null;
@@ -163,10 +168,10 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PostAsync_BankNullName_ReturnsValidationException()
+        public async Task PostAsync_BankNullName_ReturnsBadRequestValidationException()
         {
             // Arrange
-            var bank = new BankModel().Entity;
+            var bank = this.Entity;
             bank.Id = 0;
             bank.Name = null;
             var content = base.GetSerializedContent(bank);
@@ -223,7 +228,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PutAsync_BankNull_ReturnsValidationException()
+        public async Task PutAsync_BankNull_ReturnsBadRequestValidationException()
         {
             // Arrange
             Bank bank = null;
@@ -238,10 +243,10 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         }
 
         [Test]
-        public async Task PutAsync_BankNullName_ReturnsValidationException()
+        public async Task PutAsync_BankNullName_ReturnsBadRequestValidationException()
         {
             // Arrange
-            Bank bank = new BankModel().Entity;
+            var bank = this.Entity;
             bank.Name = null;
             var content = base.GetSerializedContent(bank);
             var modelState = new ModelStateDictionary().AddModelRequiredError("Name");
@@ -284,7 +289,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task Post_Put_Get_Delete_ReturnsOK()
         {
             // Arrange
-            var bank = new BankModel().Entity;
+            var bank = this.Entity;
             bank.Id = 0;
             bank.Name = Guid.NewGuid().ToString(); // make the bank name unique to prevent index error
             var expectedBank = bank;
@@ -318,7 +323,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task Post_Delete_Get_ReturnsOK()
         {
             // Arrange
-            var bank = new BankModel().Entity;
+            var bank = this.Entity;
             bank.Id = 0;
             bank.Name = Guid.NewGuid().ToString(); // make the bank name unique to prevent index error
             var content = base.GetSerializedContent(bank);

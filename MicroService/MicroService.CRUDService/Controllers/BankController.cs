@@ -77,7 +77,7 @@ namespace MicroService.CRUDService
 
         // PUT: api/Bank/
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Bank bank)
+        public async Task<IActionResult> PutAsync([FromBody] Bank bank)
         {
             if (bank == null)
             {
@@ -105,7 +105,7 @@ namespace MicroService.CRUDService
 
         // DELETE: api/Bank/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             TransactionResult result;
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
