@@ -11,7 +11,8 @@ namespace Test.Common.Models
             get => new Bank()
             {
                 Id = 3,
-                Name = "sdgsg"
+                Name = "sdgsg",
+                Grade = Grade.B
             };
         }
 
@@ -22,12 +23,19 @@ namespace Test.Common.Models
                     new Bank()
                     {
                         Id = 3,
-                        Name = "sdgsg"
+                        Name = "sdgsg",
+                        Grade = Grade.B
                     },
                     new Bank()
                     {
                         Id = 4,
                         Name = "hhhh"
+                    },
+                    new Bank()
+                    {
+                        Id = 5,
+                        Name = "gggggggggggg",
+                        Grade = Grade.A
                     }
                 };
         }

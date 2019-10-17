@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Test.Common;
 using Test.Common.Models;
 
 namespace Test.IntegrationTest.APIManager.WebAPIGateway
@@ -32,6 +34,8 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
 
         private readonly string _putBankUrl = "/bank";
 
+        private readonly string _deleteBankUrl = "/bank/{0}";
+
         #endregion /Properties
 
         #region Constructors
@@ -52,6 +56,8 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             base.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this._authToken);
         }
 
+        #region GetAsync
+
         [Test]
         public async Task GetAsync_Banks_ReturnsOK()
         {
@@ -62,7 +68,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.GetAsync(url);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.OK, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "error in returning correct response");
             var reponseBanks = await base.GetDeserializedContent<IList<Bank>>(result);
             Assert.IsInstanceOf<IList<Bank>>(reponseBanks, "error in returning the banks");
         }
@@ -78,7 +84,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.GetAsync(url);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.OK, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "error in returning correct response");
             var reponseBank = await base.GetDeserializedContent<Bank>(result);
             Assert.IsInstanceOf<Bank>(reponseBank, "error in returning the bank");
         }
@@ -95,10 +101,31 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.GetAsync(url);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.NoContent, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode, "error in returning correct response");
             var reponseBank = await base.GetDeserializedContent<Bank>(result);
             Assert.AreEqual(expectedBank, reponseBank, "error in returning the null bank");
         }
+
+        [Test]
+        public async Task GetAsync_BankNotExistId_ReturnsNoContent()
+        {
+            // Arrange
+            int bankId = await GetLastBankId() + 1;
+            Bank expectedBank = null;
+            string url = string.Format(this._getBankByIdUrl, bankId);
+
+            //Act
+            var result = await base.Client.GetAsync(url);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode, "error in returning correct response");
+            var reponseBank = await base.GetDeserializedContent<Bank>(result);
+            Assert.AreEqual(expectedBank, reponseBank, "error in returning the null bank");
+        }
+
+        #endregion /GetAsync
+
+        #region PostAsync
 
         [Test]
         public async Task PostAsync_Bank_ReturnsOK()
@@ -114,21 +141,17 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.PostAsync(url, content);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.Created, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "error in returning correct response");
             var reponseBank = await base.GetDeserializedContent<Bank>(result);
             Assert.IsInstanceOf<Bank>(reponseBank, "error in returning the bank");
             Assert.Less(0, reponseBank.Id, "error in returning the correct bankId");
         }
 
         [Test]
-        public async Task PostAsync_BankNullName_ReturnsHasDuplicateInfoException()
+        public async Task PostAsync_BankNull_ReturnsValidationException()
         {
             // Arrange
-            var bank = new BankModel().Entity;
-            bank.Id = 0;
-            bank.Name = null;
-            var modelState = new ModelStateDictionary().AddModelRequiredError("Name");
-            var expectedContent = base.GetModelStateContent(modelState);
+            Bank bank = null;
             var content = base.GetSerializedContent(bank);
             string url = this._postBankUrl;
 
@@ -136,7 +159,26 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.PostAsync(url, content);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.BadRequest, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode, "error in returning correct response");
+        }
+
+        [Test]
+        public async Task PostAsync_BankNullName_ReturnsValidationException()
+        {
+            // Arrange
+            var bank = new BankModel().Entity;
+            bank.Id = 0;
+            bank.Name = null;
+            var content = base.GetSerializedContent(bank);
+            var modelState = new ModelStateDictionary().AddModelRequiredError("Name");
+            string expectedContent = base.GetModelStateContent(modelState);
+            string url = this._postBankUrl;
+
+            //Act
+            var result = await base.Client.PostAsync(url, content);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "error in returning correct response");
             var responseContent = await base.GetDeserializedContent<string>(result);
             Assert.AreEqual(expectedContent, responseContent, "error in returning correct content");
         }
@@ -156,30 +198,152 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             var result = await base.Client.PostAsync(url, content);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.BadRequest, "error in returning correct response");
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "error in returning correct response");
             var responseContent = await base.GetDeserializedContent<string>(result);
             Assert.AreEqual(expectedContent, responseContent, "error in returning correct content");
         }
+
+        #endregion /PostAsync
+
+        #region PutAsync
 
         [Test]
         public async Task PutAsync_ReturnsOK()
         {
             // Arrange
+            var bank = await GetBank(); // don't wanna change it
+            var content = base.GetSerializedContent(bank);
             string url = this._putBankUrl;
+
+            //Act
+            var result = await base.Client.PutAsync(url, content);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "error in returning correct response");
+        }
+
+        [Test]
+        public async Task PutAsync_BankNull_ReturnsValidationException()
+        {
+            // Arrange
+            Bank bank = null;
+            var content = base.GetSerializedContent(bank);
+            string url = this._putBankUrl;
+
+            //Act
+            var result = await base.Client.PutAsync(url, content);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode, "error in returning correct response");
+        }
+
+        [Test]
+        public async Task PutAsync_BankNullName_ReturnsValidationException()
+        {
+            // Arrange
+            Bank bank = new BankModel().Entity;
+            bank.Name = null;
+            var content = base.GetSerializedContent(bank);
+            var modelState = new ModelStateDictionary().AddModelRequiredError("Name");
+            string expectedContent = base.GetModelStateContent(modelState);
+            string url = this._putBankUrl;
+
+            //Act
+            var result = await base.Client.PutAsync(url, content);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode, "error in returning correct response");
+            var responseContent = await base.GetDeserializedContent<string>(result);
+            Assert.AreEqual(expectedContent, responseContent, "error in returning correct content");
+        }
+
+        #endregion /PutAsync
+
+        #region DeleteAsync
+
+        [Test]
+        public async Task DeleteAsync_Bank_ReturnsOK()
+        {
+            // Arrange
+            int bankId = await GetLastBankId();
+            string url = string.Format(this._deleteBankUrl, bankId);
+
+            //Act
+            var result = await base.Client.DeleteAsync(url);
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "error in returning correct response");
+        }
+
+
+        #endregion /DeleteAsync
+
+        #region Post_Put_Get_Delete
+
+        [Test]
+        public async Task Post_Put_Get_Delete_ReturnsOK()
+        {
+            // Arrange
+            var bank = new BankModel().Entity;
+            bank.Id = 0;
+            bank.Name = Guid.NewGuid().ToString(); // make the bank name unique to prevent index error
+            var expectedBank = bank;
+            expectedBank.Name = Guid.NewGuid().ToString();
+            var content = base.GetSerializedContent(bank);
+
+            //Act
+            var result = await base.Client.PostAsync(this._postBankUrl, content);
+
+            // Arrange
+            bank = await base.GetDeserializedContent<Bank>(result);
+            expectedBank.Id = bank.Id;
+            bank.Name = expectedBank.Name;
+            content = base.GetSerializedContent(bank);
+            string getUrl = string.Format(this._getBankByIdUrl, expectedBank.Id);
+            string deleteUrl = string.Format(this._deleteBankUrl, expectedBank.Id);
+
+            //Act
+            await base.Client.PutAsync(this._putBankUrl, content);
+            result = await base.Client.GetAsync(getUrl);
+            bank = await base.GetDeserializedContent<Bank>(result);
+            result = await base.Client.DeleteAsync(deleteUrl);
+
+            // Assert
+            bank = await base.GetDeserializedContent<Bank>(result);
+            TestHelper.AreEqualEntities(bank, expectedBank, "error in returning correct bank");
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "error in returning correct response");
+        }
+
+        [Test]
+        public async Task Post_Delete_Get_ReturnsOK()
+        {
+            // Arrange
             var bank = new BankModel().Entity;
             bank.Id = 0;
             bank.Name = Guid.NewGuid().ToString(); // make the bank name unique to prevent index error
             var content = base.GetSerializedContent(bank);
+            Bank expectedBank = null;
 
             //Act
-            var result = await base.Client.PostAsync(url, content);
+            var result = await base.Client.PostAsync(this._postBankUrl, content);
+
+            // Arrange
+            bank = await base.GetDeserializedContent<Bank>(result);
+            int id = bank.Id;
+            string deleteUrl = string.Format(this._deleteBankUrl, id);
+            string getUrl = string.Format(this._getBankByIdUrl, id);
+
+            //Act
+            await base.Client.DeleteAsync(deleteUrl);
+            result = await base.Client.GetAsync(getUrl);
 
             // Assert
-            Assert.AreEqual(result.StatusCode, HttpStatusCode.Created, "error in returning correct response");
-            var reponseBank = await base.GetDeserializedContent<Bank>(result);
-            Assert.IsInstanceOf<Bank>(reponseBank, "error in returning the bank");
-            Assert.Less(0, reponseBank.Id, "error in returning the correct bankId");
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode, "error in returning correct response");
+            bank = await base.GetDeserializedContent<Bank>(result);
+            TestHelper.AreEqualEntities(bank, expectedBank, "error in returning correct bank");
         }
+
+        #endregion /Post_Put_Get_Delete
 
         private async Task<string> GetJWTAuthenticationToken()
         {
@@ -199,6 +363,14 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             string url = string.Format(this._getBankByIdUrl, bankId);
             var result = await base.Client.GetAsync(url);
             return await base.GetDeserializedContent<Bank>(result);
+        }
+
+        private async Task<int> GetLastBankId()
+        {
+            string url = this._getBanksUrl;
+            var result = await base.Client.GetAsync(url);
+            var banks = await base.GetDeserializedContent<IList<Bank>>(result);
+            return banks.OrderByDescending(q => q.Id).First().Id;
         }
 
         #endregion /Methods

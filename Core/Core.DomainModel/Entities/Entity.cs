@@ -1,9 +1,12 @@
-﻿namespace Core.DomainModel.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Core.DomainModel.Entities
 {
-    public abstract class Entity<TKey>: IEntity<TKey>
+    public abstract class Entity<TKey> : IEntity<TKey>
     {
 
-      public  TKey Id { get; set; }
+        [Key]
+        public TKey Id { get; set; }
 
     }
 }

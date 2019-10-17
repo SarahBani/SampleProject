@@ -51,6 +51,10 @@ namespace MicroService.CRUDService
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody]Bank bank)
         {
+            if (bank == null)
+            {
+                return new NoContentResult();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
