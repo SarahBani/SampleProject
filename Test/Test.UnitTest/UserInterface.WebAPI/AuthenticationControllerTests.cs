@@ -48,7 +48,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
         public async Task RequestToken_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredentials ()
+            var request = new UserCredential ()
             {
                 Username = "User",
                 Password = "123"
@@ -62,9 +62,9 @@ namespace Test.UnitTest.UserInterface.WebAPI
             var result = await this._controller.RequestToken(request);
 
             // Assert
-            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredentials >()),
+            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential >()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
-            this._authServiceMock.Verify(q => q.GetAuthenticationToken(It.IsAny<UserCredentials >()),
+            this._authServiceMock.Verify(q => q.GetAuthenticationToken(It.IsAny<UserCredential >()),
                 "error in calling the correct method");  // Verifies that authService.GetAuthenticationToken was called
             TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct authentication token");
         }
@@ -73,7 +73,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
         public async Task RequestToken_InvalidTokenRequest_ReturnsBadRequest()
         {
             // Arrange
-            var request = new UserCredentials ()
+            var request = new UserCredential ()
             {
                 Username = null,
                 Password = "123"
@@ -94,7 +94,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
         public async Task RequestToken_NotAuthenticatedUser_ReturnsBadRequest()
         {
             // Arrange
-            var request = new UserCredentials ()
+            var request = new UserCredential ()
             {
                 Username = "User",
                 Password = "123"
@@ -108,7 +108,7 @@ namespace Test.UnitTest.UserInterface.WebAPI
             var result =await this._controller.RequestToken(request);
 
             // Assert
-            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredentials >()),
+            this._authServiceMock.Verify(q => q.IsAuthenticated(It.IsAny<UserCredential >()),
                 "error in calling the correct method");  // Verifies that authService.IsAuthenticated was called
             TestHelper.AreEqualEntities(expectedResult, result, "error in returning the correct BadRequestObjectResult");
         }

@@ -42,7 +42,7 @@ namespace Test.UnitTest.Core.ApplicationService
         public async Task IsAuthenticated_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredentials()
+            var request = new UserCredential()
             {
                 Username = "User",
                 Password = "123"
@@ -61,7 +61,7 @@ namespace Test.UnitTest.Core.ApplicationService
         public async Task GetAuthenticationToken_ReturnsOK()
         {
             // Arrange
-            var request = new UserCredentials()
+            var request = new UserCredential()
             {
                 Username = "User",
                 Password = "123"

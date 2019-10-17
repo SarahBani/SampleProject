@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.DomainService.Models
 {
-    public class UserCredentials 
+    public class UserCredential 
     {
 
         [Required(AllowEmptyStrings = false)]

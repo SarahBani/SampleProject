@@ -31,7 +31,7 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        public async Task<bool> IsAuthenticated(UserCredentials  request)
+        public async Task<bool> IsAuthenticated(UserCredential  request)
         {
             //var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
@@ -43,7 +43,7 @@ namespace Core.ApplicationService.Implementation
             return true;
         }
 
-        public string GetAuthenticationToken(UserCredentials  request)
+        public string GetAuthenticationToken(UserCredential  request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._appSettings.SecretKey));

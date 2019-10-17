@@ -33,7 +33,7 @@ namespace MicroService.AuthenticationService.Controllers
         #region Actions
 
         [HttpPost, Route("request")]
-        public async Task<IActionResult> RequestToken([FromBody] UserCredentials  request)
+        public async Task<IActionResult> RequestToken([FromBody] UserCredential  request)
         {
             if (!ModelState.IsValid)
             {

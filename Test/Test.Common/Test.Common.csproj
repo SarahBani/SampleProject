@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.DomainModel\Core.DomainModel.csproj" />
+    <ProjectReference Include="..\..\Core\Core.DomainService\Core.DomainService.csproj" />
   </ItemGroup>
 
 </Project>

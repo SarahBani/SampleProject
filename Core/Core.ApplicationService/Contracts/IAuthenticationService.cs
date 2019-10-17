@@ -6,9 +6,9 @@ namespace Core.ApplicationService.Contracts
     public interface IAuthenticationService
     {
 
-        Task<bool> IsAuthenticated(UserCredentials  request);
+        Task<bool> IsAuthenticated(UserCredential  request);
 
-        string GetAuthenticationToken(UserCredentials  request);
+        string GetAuthenticationToken(UserCredential  request);
 
     }
 }
