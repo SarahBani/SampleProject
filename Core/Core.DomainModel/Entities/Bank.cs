@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -39,6 +40,14 @@ namespace Core.DomainModel.Entities
     {
         public void Configure(EntityTypeBuilder<Bank> builder)
         {
+            //builder.HasKey(q => q.Id);
+
+            builder.Property(q => q.Id)
+                .UseSqlServerIdentityColumn()
+                .Metadata.BeforeSaveBehavior = PropertySaveBehavior.Ignore; // make the column Identity        
+            //    .ValueGeneratedOnAdd(); // make the key identity            
+            //    .ValueGeneratedNever(); // don't make the key identity    
+
             builder.HasIndex(q => q.Name)
                 .IsUnique();
 

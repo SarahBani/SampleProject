@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
 using DependencyInversion.Injector;
@@ -33,20 +34,8 @@ namespace MicroService.AuthenticationService
 
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Configuration["Environment"] != "IntegrationTest")
-            {
-                string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
-                services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
-            }
-            else
-            {
-                var builder = new ConfigurationBuilder()
-                  .SetBasePath(Directory.GetCurrentDirectory())
-                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                IConfigurationRoot config = builder.Build();
-                string connectionString = Core.DomainService.Utility.GetConnectionString(config);
-                services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
-            }
+            string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
+            services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             services.SetInjection();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .ConfigureApiBehaviorOptions(options =>

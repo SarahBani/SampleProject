@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Test.Common;
 using Test.Common.Models;
@@ -82,8 +81,12 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task GetAsync_BankById_ReturnsOK()
         {
             // Arrange
-            int bankId = 5;
-            string url = string.Format(this._getBankByIdUrl, bankId);
+            var bank = await GetLastBank();
+            if (bank == null) // no bank exists
+            {
+                Assert.Pass();
+            }
+            string url = string.Format(this._getBankByIdUrl, bank.Id);
 
             //Act
             var result = await base.Client.GetAsync(url);
@@ -192,7 +195,12 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task PostAsync_DuplicateBank_ReturnsHasDuplicateInfoException()
         {
             // Arrange
-            var existedBank = await GetBank();
+            var existedBank = await GetLastBank();
+            if (existedBank == null) // no bank exists
+            {
+                Assert.Pass();
+                return;
+            }
             var bank = existedBank;
             bank.Id = 0;
             var content = base.GetSerializedContent(bank);
@@ -216,7 +224,12 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public async Task PutAsync_ReturnsOK()
         {
             // Arrange
-            var bank = await GetBank(); // don't wanna change it
+            var bank = await GetLastBank();
+            if (bank == null) // no bank exists
+            {
+                Assert.Pass();
+                return;
+            }
             var content = base.GetSerializedContent(bank);
             string url = this._putBankUrl;
 
@@ -271,6 +284,10 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         {
             // Arrange
             int bankId = await GetLastBankId();
+            if (bankId == 0) // no bank exists
+            {
+                Assert.Pass();
+            }
             string url = string.Format(this._deleteBankUrl, bankId);
 
             //Act
@@ -362,20 +379,17 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
             return base.GetSerializedContent(userCredential);
         }
 
-        private async Task<Bank> GetBank()
-        {
-            int bankId = 5;
-            string url = string.Format(this._getBankByIdUrl, bankId);
-            var result = await base.Client.GetAsync(url);
-            return await base.GetDeserializedContent<Bank>(result);
-        }
-
-        private async Task<int> GetLastBankId()
+        private async Task<Bank> GetLastBank()
         {
             string url = this._getBanksUrl;
             var result = await base.Client.GetAsync(url);
             var banks = await base.GetDeserializedContent<IList<Bank>>(result);
-            return banks.OrderByDescending(q => q.Id).First().Id;
+            return banks.OrderByDescending(q => q.Id).FirstOrDefault();
+        }
+
+        private async Task<int> GetLastBankId()
+        {
+            return (await GetLastBank())?.Id ?? 0;
         }
 
         #endregion /Methods

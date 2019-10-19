@@ -19,6 +19,8 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
         #region Properties
 
+        //protected SampleDataBaseContext DBContext { get; private set; } // for testing in memory database
+
         protected Mock<SampleDataBaseContext> DataBaseContextMock { get; private set; }
 
         protected ReadOnlyRepository<TEntity, TKey> Repository { get; private set; }
@@ -49,9 +51,21 @@ namespace Test.UnitTest.Infrastructure.DataBase
             this.DataBaseContextMock = new Mock<SampleDataBaseContext>(options);
         }
 
+        //private SampleDataBaseContext GetInMemoryDataBaseContext()
+        //{
+        //    var options = new DbContextOptionsBuilder<SampleDataBaseContext>()
+        //       .UseInMemoryDatabase("InMemory")
+        //       .Options;
+        //    var dbContext = new SampleDataBaseContext(options);
+        //    dbContext.Database.EnsureDeleted();
+        //    dbContext.Database.EnsureCreated();
+        //    return dbContext;
+        //}
+
         protected void SetRepository<T>() where T : ReadOnlyRepository<TEntity, TKey>
         {
             this.Repository = (T)Activator.CreateInstance(typeof(T), this.DataBaseContextMock.Object);
+            //this.Repository = (T)Activator.CreateInstance(typeof(T), GetInMemoryDataBaseContext());
         }
 
         protected Mock<DbSet<TEntity>> GetDbSetMock()

@@ -38,6 +38,17 @@ namespace APIManager.WebAPIGateway
             services.AddOcelot(this.Configuration);
         }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            app.UseAuthentication();
+            app.UseOcelot().Wait();
+        }
+
         private void SetAuthentication(IServiceCollection services)
         {
             // configure strongly typed settings objects
@@ -91,17 +102,6 @@ namespace APIManager.WebAPIGateway
                     }
                 };
             });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            app.UseAuthentication();
-            app.UseOcelot().Wait();
         }
 
         #endregion /Methods

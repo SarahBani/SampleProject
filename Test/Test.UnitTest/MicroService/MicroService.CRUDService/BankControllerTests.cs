@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Test.Common;
 using Test.Common.Models;
-using Test.UnitTest;
 
 namespace Test.MicroService.CRUDService
 {
@@ -48,11 +47,17 @@ namespace Test.MicroService.CRUDService
         #region Methods
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             this._bankServiceMock = new Mock<IBankService>();
             this._controller = new BankController(this._bankServiceMock.Object);
         }
+
+        [SetUp]
+        public void SetUp()
+        {
+            this._controller.ModelState.Clear();
+        }        
 
         #region GetAsync
 

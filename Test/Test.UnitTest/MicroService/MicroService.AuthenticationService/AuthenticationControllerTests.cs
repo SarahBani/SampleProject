@@ -1,7 +1,6 @@
 ﻿using Core.ApplicationService.Contracts;
 using Core.DomainModel;
 using Core.DomainService;
-using Core.DomainService.Models;
 using MicroService.AuthenticationService.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -39,10 +38,16 @@ namespace Test.MicroService.AuthenticationService
         #region Methods
 
         [OneTimeSetUp]
-        public void Setup()
+        public void OneTimeSetUp()
         {
             this._authServiceMock = new Mock<IAuthenticationService>();
             this._controller = new AuthenticationController(this._authServiceMock.Object);
+        }        
+
+        [SetUp]
+        public void SetUp()
+        {
+            this._controller.ModelState.Clear();
         }
 
         [Test]

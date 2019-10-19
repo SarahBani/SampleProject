@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Text;
 using Core.DomainModel.Entities;
@@ -38,19 +39,26 @@ namespace MicroService.CRUDService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (Configuration["Environment"] != "IntegrationTest")
+            if (!this.Configuration["Environment"].Equals("IntegrationTest"))
             {
                 string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
                 services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
             else
             {
-                var builder = new ConfigurationBuilder()
-                  .SetBasePath(Directory.GetCurrentDirectory())
-                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-                IConfigurationRoot config = builder.Build();
-                string connectionString = Core.DomainService.Utility.GetConnectionString(config);
-                services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
+                /// we can change the default connection string or make it in-memory
+                services.AddEntityFrameworkInMemoryDatabase()
+                    .AddDbContext<SampleDataBaseContext>((provider, options) =>
+                    {
+                        options.UseInMemoryDatabase("InMemory").UseInternalServiceProvider(provider);
+                    });
+
+                //var builder = new ConfigurationBuilder()
+                //  .SetBasePath(Directory.GetCurrentDirectory())
+                //     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                //IConfigurationRoot config = builder.Build();
+                //string connectionString = Core.DomainService.Utility.GetConnectionString(config);
+                //services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
             }
             services.SetInjection();
             services.AddCors();
@@ -118,7 +126,7 @@ namespace MicroService.CRUDService
                 };
                 //options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
-               //options.Audience = appSettings.Issuer;
+                //options.Audience = appSettings.Issuer;
             });
         }
 
