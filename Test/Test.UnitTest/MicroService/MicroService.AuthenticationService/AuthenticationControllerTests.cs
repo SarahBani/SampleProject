@@ -58,7 +58,7 @@ namespace Test.MicroService.AuthenticationService
             string authenticationToken = "sample_authentication_token";
             var expectedResult = new OkObjectResult(authenticationToken);
             this._authServiceMock.Setup(q => q.IsAuthenticated(userCredential)).ReturnsAsync(true);
-            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).Returns(authenticationToken);
+            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(authenticationToken);
 
             //Act
             var result = await this._controller.RequestToken(userCredential);
@@ -96,7 +96,7 @@ namespace Test.MicroService.AuthenticationService
             string authenticationToken = "sample_authentication_token";
             var expectedResult = new BadRequestObjectResult(Constant.Exception_InvalidAuthentication);
             this._authServiceMock.Setup(q => q.IsAuthenticated(userCredential)).ReturnsAsync(false);
-            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).Returns(authenticationToken);
+            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(authenticationToken);
 
             //Act
             var result = await this._controller.RequestToken(userCredential);

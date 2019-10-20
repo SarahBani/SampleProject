@@ -4,14 +4,16 @@ using Core.DomainModel.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.DomainModel.Migrations
 {
     [DbContext(typeof(SampleDataBaseContext))]
-    partial class SampleDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191020073848_User & Role Unique index")]
+    partial class UserRoleUniqueindex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,9 +85,7 @@ namespace Core.DomainModel.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("NEWID()");
+                        .IsConcurrencyToken();
 
                     b.Property<string>("Description");
 
@@ -118,9 +118,7 @@ namespace Core.DomainModel.Migrations
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("NEWID()");
+                        .IsConcurrencyToken();
 
                     b.Property<string>("CustomTag");
 

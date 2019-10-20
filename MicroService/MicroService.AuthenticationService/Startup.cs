@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
-using Core.DomainModel.Entities;
+﻿using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
 using DependencyInversion.Injector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +35,20 @@ namespace MicroService.AuthenticationService
         {
             string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
             services.AddDbContext<SampleDataBaseContext>(options => options.UseSqlServer(connectionString));
+
+            /// custom user & Role with int key
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+            })
+                    .AddEntityFrameworkStores<SampleDataBaseContext>()
+                    .AddDefaultTokenProviders();
+
             services.SetInjection();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .ConfigureApiBehaviorOptions(options =>

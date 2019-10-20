@@ -15,6 +15,10 @@ namespace Core.DomainModel
         ArithmeticOverflow = 8115,
 
         NoActiveTransaction,
+        RegistrationFailed,
+        LoginFailed,
+        ChangePasswordFailed,
+        RoleCreationFailed,
         SendEmailProblem,
         InvalidConfirmationToken,
         EmailAlreadyExists,
@@ -116,8 +120,17 @@ namespace Core.DomainModel
                     case ExceptionKey.NoActiveTransaction:
                         result = Constant.Exception_NoActiveTransaction;
                         break;
-                    case ExceptionKey.SendEmailProblem:
-                        result = Constant.Exception_SendEmailError;
+                    case ExceptionKey.RegistrationFailed:
+                        result = Constant.Exception_RegistrationFailed;
+                        break;
+                    case ExceptionKey.LoginFailed:
+                        result = Constant.Exception_LoginFailed;
+                        break;
+                    case ExceptionKey.ChangePasswordFailed:
+                        result = Constant.Exception_ChangePasswordFailed;
+                        break;
+                    case ExceptionKey.RoleCreationFailed:
+                        result = Constant.Exception_RoleCreationFailed;
                         break;
                     case ExceptionKey.NotDefined:
                     default:

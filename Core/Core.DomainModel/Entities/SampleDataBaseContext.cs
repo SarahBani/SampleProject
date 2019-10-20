@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Core.DomainModel.Entities
 {
-    public class SampleDataBaseContext : DbContext// IdentityDbContext<User, Role, int>
+    public class SampleDataBaseContext : IdentityDbContext<User, Role, int>
     {
 
         #region Properties
@@ -51,33 +51,36 @@ namespace Core.DomainModel.Entities
             modelBuilder.ApplyConfiguration(new CountryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BankEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BranchEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
 
-            //modelBuilder.Ignore<IdentityUserLogin<int>>();
-            //modelBuilder.Ignore<IdentityUserToken<int>>();
-            //modelBuilder.Ignore<IdentityRoleClaim<int>>();
+            modelBuilder.Ignore<IdentityUserLogin<int>>();
+            modelBuilder.Ignore<IdentityUserToken<int>>();
+            modelBuilder.Ignore<IdentityRoleClaim<int>>();
 
-            //modelBuilder.Entity<IdentityUserRole<int>>(entity =>
-            //{
-            //    entity.ToTable("UserRole");
-            //});
-            //modelBuilder.Entity<IdentityUserLogin<int>>(entity =>
-            //{
-            //    entity.ToTable("UserLogin");
-            //});
-            //modelBuilder.Entity<IdentityUserToken<int>>(entity =>
-            //{
-            //    entity.ToTable("UserToken");
-            //});
-            //modelBuilder.Entity<IdentityUserClaim<int>>(entity =>
-            //{
-            //    entity.ToTable("UserClaim");
-            //});
-            //modelBuilder.Entity<IdentityRoleClaim<int>>(entity =>
-            //{
-            //    entity.ToTable("RoleClaim");
-            //});
+            modelBuilder.Entity<IdentityUserRole<int>>(entity =>
+            {
+                entity.ToTable("UserRole");
+            });
+            modelBuilder.Entity<IdentityUserLogin<int>>(entity =>
+            {
+                //entity.HasKey(q => new { q.LoginProvider, q.ProviderKey, q.UserId });
+                entity.HasKey(q => q.UserId);
+                entity.ToTable("UserLogin");
+            });
+            modelBuilder.Entity<IdentityUserToken<int>>(entity =>
+            {
+                entity.HasKey(q => q.UserId);
+                entity.ToTable("UserToken");
+            });
+            modelBuilder.Entity<IdentityUserClaim<int>>(entity =>
+            {
+                entity.ToTable("UserClaim");
+            });
+            modelBuilder.Entity<IdentityRoleClaim<int>>(entity =>
+            {
+                entity.ToTable("RoleClaim");
+            });
         }
 
         public virtual void SetModified(object entity)

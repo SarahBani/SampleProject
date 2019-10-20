@@ -14,6 +14,13 @@ namespace Core.DomainModel.Entities
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("User");
+
+            builder.HasIndex(q => q.UserName)
+             .IsUnique();
+
+            builder.Property(q => q.ConcurrencyStamp)
+                .HasDefaultValueSql("NEWID()");
         }
     }
+
 }

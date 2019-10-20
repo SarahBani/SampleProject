@@ -1,6 +1,9 @@
 ﻿using Core.ApplicationService.Implementation;
-using Core.DomainService.Models;
+using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
@@ -36,7 +39,14 @@ namespace Test.UnitTest.Core.ApplicationService
         {
             this._appSettingsMock = new Mock<IOptions<AuthenticationAppSettings>>();
             this._appSettingsMock.Setup(q => q.Value.SecretKey).Returns("just_some_secret_big_key_value");
-            this._service = new AuthenticationService(this._appSettingsMock.Object);
+
+            var options = new DbContextOptions<SampleDataBaseContext>();
+            var dbContextMock = new Mock<SampleDataBaseContext>(options);
+            var userStore = new UserStore<IdentityUser>(dbContextMock.Object);
+            var userManager = new UserManager<IdentityUser>(userStore, null, null, null, null, null, null, null, null);
+            var roleStore = new RoleStore<IdentityRole>(dbContextMock.Object);
+            var roleManager = new RoleManager<IdentityRole>(roleStore, null, null, null, null);
+            //this._service = new AuthenticationService(this._appSettingsMock.Object, userManager, roleManager);
         }
 
         [Test]
