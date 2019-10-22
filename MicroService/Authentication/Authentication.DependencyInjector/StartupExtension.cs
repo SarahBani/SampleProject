@@ -22,6 +22,7 @@ namespace Authentication.DependencyInjector
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = false;
             })
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<SampleDataBaseContext>()
                 .AddDefaultTokenProviders();
 
