@@ -22,14 +22,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core.ApplicationService\Core.ApplicationService.csproj" />
     <ProjectReference Include="..\..\Core\Core.DomainModel\Core.DomainModel.csproj" />
-    <ProjectReference Include="..\..\MicroService\MicroService.AuthenticationService\MicroService.AuthenticationService.csproj" />
-    <ProjectReference Include="..\..\MicroService\MicroService.CRUDService\MicroService.CRUDService.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.DataBase\Infrastructure.DataBase.csproj" />
     <ProjectReference Include="..\Test.Common\Test.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UserInterface.WebAPI\" />
-    <Folder Include="UserInterface.WebApplication\" />
   </ItemGroup>
 
 </Project>

@@ -21,7 +21,6 @@ namespace DependencyInversion.Injector
             services.AddScoped<IRepository<Bank, int>, BankRepository>();
             services.AddScoped<IRepository<Branch, int>, BranchRepository>();
 
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBranchService, BranchService>();

@@ -1,19 +1,18 @@
-﻿using Core.DomainModel.Entities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
-namespace Core.DomainService
+namespace Authentication.Core.DomainService
 {
     public interface IUnitOfWork : IDisposable
     {
 
         string GetTransactionName();
 
-        void BeginTransaction(string transactionName);
+        Task BeginTransactionAsync(string transactionName);
 
         bool HasTransaction();
 
-        Task CommitAsync();
+        void Commit();
 
         void RollBack();
 

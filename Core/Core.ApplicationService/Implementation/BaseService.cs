@@ -69,7 +69,7 @@ namespace Core.ApplicationService.Implementation
         {
             if (base.EntityService.UnitOfWork.GetTransactionName().Equals(GetCallerMethod()))
             {
-                await base.EntityService.UnitOfWork.Commit();
+                await base.EntityService.UnitOfWork.CommitAsync();
             }
             return new TransactionResult(content);
         }

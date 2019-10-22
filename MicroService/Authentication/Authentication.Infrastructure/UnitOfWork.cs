@@ -1,10 +1,11 @@
 ﻿using Core.DomainModel;
 using Core.DomainModel.Entities;
-using Core.DomainService;
+using Authentication.Core.DomainService;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Threading.Tasks;
 
-namespace Infrastructure.DataBase
+namespace Authentication.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -14,6 +15,8 @@ namespace Infrastructure.DataBase
         private string _transactionName;
 
         private SampleDataBaseContext _dbContext;
+
+        private IDbContextTransaction _transaction;
 
         #endregion /Properties
 
@@ -47,26 +50,33 @@ namespace Infrastructure.DataBase
             return !string.IsNullOrEmpty(this._transactionName);
         }
 
-        public void BeginTransaction(string transactionName)
+        public async Task BeginTransactionAsync(string transactionName)
         {
             if (string.IsNullOrEmpty(this._transactionName))
             {
                 this._transactionName = transactionName;
+                this._transaction = await this._dbContext.Database.BeginTransactionAsync();
             }
         }
 
-        public async Task CommitAsync()
+        public void Commit()
         {
             if (string.IsNullOrEmpty(this._transactionName))
             {
                 throw new CustomException(ExceptionKey.NoActiveTransaction);
             }
-            await this._dbContext.SaveChangesAsync();
+            this._transaction.Commit();
             this._transactionName = string.Empty;
         }
 
         public void RollBack()
         {
+            if (string.IsNullOrEmpty(this._transactionName))
+            {
+                throw new CustomException(ExceptionKey.NoActiveTransaction);
+            }
+            this._transaction.Rollback();
+            this._transactionName = string.Empty;
         }
 
         public void Dispose()
@@ -74,6 +84,10 @@ namespace Infrastructure.DataBase
             if (this._dbContext != null)
             {
                 this._dbContext.Dispose();
+            }
+            if (this._transaction != null)
+            {
+                this._transaction.Dispose();
             }
             GC.SuppressFinalize(this);
         }

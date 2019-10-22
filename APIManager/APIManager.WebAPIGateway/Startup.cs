@@ -1,4 +1,5 @@
-﻿using Core.DomainService.Settings;
+﻿using Authentication.Core.DomainService.Settings;
+using Core.DomainService.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,10 +54,10 @@ namespace APIManager.WebAPIGateway
         {
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AuthenticationAppSettings>(appSettingsSection);
+            services.Configure<MVCAppSettings>(appSettingsSection);
 
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AuthenticationAppSettings>();
+            var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
 
             var identityUrl = Configuration.GetValue<string>("IdentityUrl");
