@@ -1,5 +1,4 @@
 ﻿using Authentication.Core.ApplicationService.Contracts;
-using Core.DomainModel;
 using Core.DomainService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -38,12 +37,15 @@ namespace Authentication.WebAPIService.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (await _authService.IsAuthenticated(request))
+            var transactionResult = await _authService.GetAuthenticationToken(request);
+            if (transactionResult.IsSuccessful)
             {
-                string token = await _authService.GetAuthenticationToken(request);
+                string token = transactionResult.Content.ToString();
                 return Ok(token);
             }
-            return BadRequest(Constant.Exception_InvalidAuthentication);
+            return BadRequest(transactionResult.ExceptionContentResult);
+            //return Unauthorized();
+            //return BadRequest(Constant.Exception_InvalidAuthentication);
         }
 
         #endregion /Actions

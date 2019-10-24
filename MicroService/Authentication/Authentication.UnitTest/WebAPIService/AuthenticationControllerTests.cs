@@ -56,9 +56,10 @@ namespace Authentication.UnitTest.WebAPIService
             // Arrange
             var userCredential = new UserCredentialModel().Entity;
             string authenticationToken = "sample_authentication_token";
-            var expectedResult = new OkObjectResult(authenticationToken);
+            var transactionResult = new TransactionResult(authenticationToken);
+            var expectedResult = new OkObjectResult(transactionResult);
             this._authServiceMock.Setup(q => q.IsAuthenticated(userCredential)).ReturnsAsync(true);
-            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(authenticationToken);
+            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(transactionResult);
 
             //Act
             var result = await this._controller.RequestToken(userCredential);
@@ -93,10 +94,9 @@ namespace Authentication.UnitTest.WebAPIService
         {
             // Arrange
             var userCredential = new UserCredentialModel().NotAuthenticatedEntity;
-            string authenticationToken = "sample_authentication_token";
-            var expectedResult = new BadRequestObjectResult(Constant.Exception_InvalidAuthentication);
-            this._authServiceMock.Setup(q => q.IsAuthenticated(userCredential)).ReturnsAsync(false);
-            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(authenticationToken);
+            var transactionResult = new TransactionResult(new CustomException(Constant.Exception_AuthenticationFailed));
+            this._authServiceMock.Setup(q => q.GetAuthenticationToken(userCredential)).ReturnsAsync(transactionResult);
+            var expectedResult = new BadRequestObjectResult(Constant.Exception_AuthenticationFailed);
 
             //Act
             var result = await this._controller.RequestToken(userCredential);

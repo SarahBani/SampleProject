@@ -15,6 +15,7 @@ using Core.DomainModel;
 using Core.DomainService.Models;
 using Core.DomainModel.Entities;
 using IUnitOfWork = Authentication.Core.DomainService.IUnitOfWork;
+using Microsoft.AspNetCore.Http;
 
 namespace Authentication.Core.ApplicationService.Implementation
 {
@@ -29,6 +30,9 @@ namespace Authentication.Core.ApplicationService.Implementation
 
         private readonly RoleManager<Role> _roleManager;
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+
         #endregion /Properties
 
         #region Constructors
@@ -36,12 +40,14 @@ namespace Authentication.Core.ApplicationService.Implementation
         public AuthService(IOptions<AppSettings> appSettings,
             UserManager<User> userManager,
             RoleManager<Role> roleManager,
+            IHttpContextAccessor httpContextAccessor,
             IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             this._appSettings = appSettings.Value;
             this._userManager = userManager;
             this._roleManager = roleManager;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         #endregion /Constructors
@@ -52,11 +58,20 @@ namespace Authentication.Core.ApplicationService.Implementation
         {
             try
             {
+                if (this._userManager.FindByEmailAsync(user.Email).Result != null)
+                {
+                    throw new CustomException(Constant.Exception_EmailAlreadyRegistered);
+                }
+                if (this._userManager.FindByNameAsync(user.UserName).Result != null)
+                {
+                    throw new CustomException(Constant.Exception_DuplicateUserName);
+                }
                 await BeginTransactionAsync();
                 var identityResult = await this._userManager.CreateAsync(user, password);
                 if (identityResult.Succeeded)
                 {
-                    await AddRole(user, "Member");
+                    await AddRole(user, RoleEnum.Member.ToString());
+                    await AddClaims(user, RoleEnum.Member);
                 }
                 else
                 {
@@ -101,8 +116,53 @@ namespace Authentication.Core.ApplicationService.Implementation
             }
         }
 
+        private async Task<TransactionResult> AddClaims(User user, RoleEnum role)
+        {
+            string subSystems = string.Empty;
+            switch (role)
+            {
+                case RoleEnum.Admin:
+                case RoleEnum.Manager:
+                    subSystems = string.Join(";", SubSystemEnum.CRUD.ToString(), SubSystemEnum.CQRS.ToString());
+                    break;
+                case RoleEnum.Employee:
+                case RoleEnum.Member:
+                default:
+                    subSystems = SubSystemEnum.CRUD.ToString();
+                    break;
+            }
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.System, subSystems)
+
+            };
+            //claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+
+            var result = await this._userManager.AddClaimsAsync(user, claims);
+            if (result.Succeeded)
+            {
+                return new TransactionResult();
+            }
+            else
+            {
+                string errors = string.Empty;
+                if (result.Errors.Count() > 0)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        errors += error.Description;
+                    }
+                    throw new CustomException(errors);
+                }
+                throw new CustomException(Constant.Exception_RegistrationFailed);
+            }
+        }
+
         public async Task<TransactionResult> Login(string userName, string password)
         {
+            //var userId = this._httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await this._userManager.FindByNameAsync(userName);
             if (user != null)
             {
@@ -155,38 +215,50 @@ namespace Authentication.Core.ApplicationService.Implementation
             return result.IsSuccessful;
         }
 
-        public async Task<string> GetAuthenticationToken(UserCredential request)
+        public async Task<TransactionResult> GetAuthenticationToken(UserCredential request)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._appSettings.SecretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature); //  HmacSha256Signature);
+            try
+            {
+                var user = await this._userManager.FindByNameAsync(request.Username);
+                if (user == null)
+                {
+                    throw new CustomException(ExceptionKey.AuthenticationFailed);
+                }
+                var claims = await this._userManager.GetClaimsAsync(user);
+                if (claims == null)
+                {
+                    throw new CustomException(ExceptionKey.UserNotAccess);
+                }
+                var subSystems = claims.SingleOrDefault(q => q.ValueType == ClaimTypes.System);
+                if (subSystems == null)
+                {
+                    throw new CustomException(ExceptionKey.UserNotAccess);
+                }
 
-            var user = await this._userManager.FindByNameAsync(request.Username);
-            var roles = await _userManager.GetRolesAsync(user);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName)
-            };
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._appSettings.SecretKey));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature); //  HmacSha256Signature);
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Issuer = this._appSettings.Issuer,
+                    Audience = subSystems.Value,
+                    //Subject = new ClaimsIdentity(new Claim[]
+                    //{
+                    //    new Claim(ClaimTypes.Name, "crud")
+                    //}),
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddMinutes(double.Parse(this._appSettings.AccessExpiration)),
+                    SigningCredentials = credentials
+                };
+                string token = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
+
+                return CommitTransaction(token);
             }
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            catch (Exception ex)
             {
-                Issuer = this._appSettings.Issuer,
-                Audience = "crud",
-                //Subject = new ClaimsIdentity(new Claim[]
-                //{
-                //    new Claim(ClaimTypes.Name, "crud")
-                //}),
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(120),
-                SigningCredentials = credentials
-            };
-
-            return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
+                return GetTransactionException(ex);
+            }
         }
 
         #endregion /Methods

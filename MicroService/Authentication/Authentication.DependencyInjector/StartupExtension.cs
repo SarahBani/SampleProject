@@ -5,6 +5,7 @@ using Authentication.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Authentication.Core.DomainService;
+using Microsoft.AspNetCore.Http;
 
 namespace Authentication.DependencyInjector
 {
@@ -25,9 +26,9 @@ namespace Authentication.DependencyInjector
                 .AddRoles<Role>()
                 .AddEntityFrameworkStores<SampleDataBaseContext>()
                 .AddDefaultTokenProviders();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
             services.AddScoped<IAuthService, AuthService>();
 
             return services;

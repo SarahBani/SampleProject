@@ -1,4 +1,5 @@
 ﻿using Core.DomainModel.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -13,7 +14,7 @@ namespace Core.DomainModel.Migrations
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var dbContext = new SampleDataBaseContext(new DbContextOptions<SampleDataBaseContext>());
+                var dbContext = new SampleDataBaseContext(new DbContextOptions<SampleDataBaseContext>(), new HttpContextAccessor());
                 var userStore = new CustomUserStore(dbContext);
                 var userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
                 var user = new User
@@ -33,7 +34,7 @@ namespace Core.DomainModel.Migrations
                 var hashed = new PasswordHasher<User>().HashPassword(user, password);
                 user.PasswordHash = hashed;
                 var result = userStore.CreateAsync(user).Result;
-                 userStore.AddToRoleAsync(user, "Admin").Wait();
+                userStore.AddToRoleAsync(user, "Admin").Wait();
 
                 dbContext.SaveChanges();
                 scope.Complete();

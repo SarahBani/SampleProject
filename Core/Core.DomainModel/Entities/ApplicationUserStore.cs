@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.DomainModel.Entities
 {
 
-    public class CustomUserStore : IUserPasswordStore<User>, IUserEmailStore<User>, IUserRoleStore<User>
+    public class CustomUserStore : IUserPasswordStore<User>, IUserEmailStore<User>, IUserRoleStore<User>, IUserClaimStore<User>
     {
 
         #region Properties
@@ -63,16 +64,16 @@ namespace Core.DomainModel.Entities
                 : IdentityResult.Failed(new IdentityError() { Description = $"Could not delete user {user.UserName}." });
         }
 
-        public async Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<User> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _context.Users.SingleOrDefaultAsync(u => u.Id.Equals(Guid.Parse(userId)), cancellationToken);
+            return _context.Users.SingleOrDefaultAsync(u => u.Id.Equals(Guid.Parse(userId)), cancellationToken);
         }
 
-        public async Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
+        public Task<User> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _context.Users.SingleOrDefaultAsync(u => u.UserName.Equals(normalizedUserName.ToLower()), cancellationToken);
+            return _context.Users.SingleOrDefaultAsync(u => u.UserName.Equals(normalizedUserName.ToLower()), cancellationToken);
         }
 
         public Task<string> GetNormalizedUserNameAsync(User user, CancellationToken cancellationToken = default)
@@ -163,10 +164,10 @@ namespace Core.DomainModel.Entities
             return Task.FromResult<object>(null);
         }
 
-        public async Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
+        public Task<User> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _context.Users.SingleOrDefaultAsync(u => u.UserName.Equals(normalizedEmail), cancellationToken);
+            return _context.Users.SingleOrDefaultAsync(u => u.UserName.Equals(normalizedEmail), cancellationToken);
         }
 
         public Task<string> GetEmailAsync(User user, CancellationToken cancellationToken = default)
@@ -312,6 +313,98 @@ namespace Core.DomainModel.Entities
                  .Where(q => q.Role.Name.Equals(roleName))
                  .Select(q => q.User)
                  .ToListAsync(cancellationToken);
+        }
+
+        public async Task<IList<Claim>> GetClaimsAsync(User user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            return await this._context.UserClaims.Where(q => q.UserId.Equals(user.Id)).Select(q => q.ToClaim()).ToListAsync(cancellationToken);
+        }
+
+        public Task AddClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (claims == null)
+            {
+                throw new ArgumentNullException(nameof(claims));
+            }
+            var userClaims = new List<IdentityUserClaim<int>>();
+            foreach (var claim in claims)
+            {
+                userClaims.Add(new IdentityUserClaim<int>()
+                {
+                    UserId = user.Id,
+                    ClaimType = claim.Type,
+                    ClaimValue = claim.Value
+                });
+            }
+            return Task.FromResult(this._context.UserClaims.AddRangeAsync(userClaims, cancellationToken));
+        }
+
+        public async Task ReplaceClaimAsync(User user, Claim claim, Claim newClaim, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (claim == null)
+            {
+                throw new ArgumentNullException(nameof(claim));
+            }
+            if (newClaim == null)
+            {
+                throw new ArgumentNullException(nameof(newClaim));
+            }
+            var userClaim = await this._context.UserClaims.SingleOrDefaultAsync(q => q.UserId == user.Id && q.ToClaim() == claim, cancellationToken);
+            userClaim.ClaimType = newClaim.Type;
+            userClaim.ClaimValue = newClaim.Value;
+            this._context.UserClaims.Update(userClaim);
+        }
+
+        public Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (claims == null)
+            {
+                throw new ArgumentNullException(nameof(claims));
+            }
+            var userClaims = this._context.UserClaims.Where(q => q.UserId == user.Id && claims.Any(x => x == q.ToClaim()));
+            this._context.UserClaims.RemoveRange(userClaims);
+            return Task.FromResult<object>(null);
+        }
+
+        public async Task<IList<User>> GetUsersForClaimAsync(Claim claim, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (claim == null)
+            {
+                throw new ArgumentNullException(nameof(claim));
+            }
+            return await this._context.UserClaims
+                .Join(this._context.Users,
+                      userClaim => userClaim.UserId,
+                      user => user.Id,
+                     (userClaim, user) => new
+                     {
+                         User = user,
+                         UserClaim = userClaim
+                     })
+                .Where(q => q.UserClaim.ToClaim() == claim)
+                .Select(q=>q.User)
+                .ToListAsync(cancellationToken);
         }
 
         #endregion /Methods

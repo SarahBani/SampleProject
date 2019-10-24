@@ -5,11 +5,13 @@
 
         #region AppSetting
 
+        public const string AppSetting_AppSettings = "AppSettings";
         public const string AppSetting_DefaultConnection = "DefaultConnection";
         public const string AppSetting_WebSiteEmail = "WebSiteEmail";
         public const string AppSetting_WebSiteEmail_Name = "WebSiteEmail:Name";
         public const string AppSetting_WebSiteEmail_Address = "WebSiteEmail:Address";
         public const string AppSetting_ErrorLogFile = "ErrorLogFile";
+        public const string AppSetting_IdentityUrl = "IdentityUrl";
 
         #endregion /AppSetting
 
@@ -40,16 +42,19 @@
 
         public const string Exception_HasError = "An error has occured!";
 
-        public const string Exception_NoActiveTransaction = "There is no active transation!";
+        public const string Exception_NoActiveTransaction = "There is no active transation!";        
+        public const string Exception_DuplicateUserName = "This username is already taken!";
+        public const string Exception_EmailAlreadyRegistered = "This email has already registered!";
         public const string Exception_RegistrationFailed = "An error occured in registeration!";
         public const string Exception_ChangePasswordFailed = "Changing password failed!";
         public const string Exception_LoginFailed = "Username or password is incorrect!";
         public const string Exception_RoleCreationFailed = "An error occured in creation role!";
+        public const string Exception_AuthenticationFailed = "Authentication failed!";
+        public const string Exception_UserNotAccess = "The user does not have the required access!";
 
         public const string Exception_NoFileSelected = "No file is chosen!";
-        public const string Exception_SendEmailError = "There has been an error in sending the email!";
-        public const string Exception_EmailAlreadyRegisteredError = "This email has already registered!";
-        public const string Exception_EmailNotRegisteredError = "This email has not registered yet!";
+        public const string Exception_SendEmail = "There has been an error in sending the email!";
+        public const string Exception_EmailNotRegistered = "This email has not registered yet!";
         public const string Exception_PathNotFound = "The path could not be found!";
         public const string Exception_FailedAuthentication = "Authentication failed!";
 
@@ -62,7 +67,7 @@
         public const string Exception_WebServiceAssignmentExpired = "Your token has been expired!";
         public const string Exception_InvalidAuthentication = "The authentication is invalid!";
 
-        #endregion /Exceptions        
+        #endregion /Exceptions   
 
     }
 }

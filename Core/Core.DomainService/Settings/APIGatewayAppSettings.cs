@@ -1,6 +1,6 @@
 ﻿namespace Core.DomainService.Settings
 {
-    public class APIAppSettings
+    public class APIGatewayAppSettings
     {
 
         #region Properties
@@ -9,7 +9,7 @@
 
         public virtual string Issuer { get; set; }
 
-        public virtual string Audience { get; set; }
+        public virtual string Audiences { get; set; }
 
         #endregion /Properties
 

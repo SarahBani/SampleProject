@@ -16,7 +16,7 @@ namespace Authentication.Core.ApplicationService.Contracts
 
         Task<bool> IsAuthenticated(UserCredential request);
 
-        Task<string> GetAuthenticationToken(UserCredential request);
+        Task<TransactionResult> GetAuthenticationToken(UserCredential userCredential);
 
     }
 }

@@ -38,7 +38,7 @@ namespace Authentication.WebAPIService.Models
 
         public User ConvertToUser() {
             return new User() {
-                UserName = this.UsertName,
+                UserName = this.UsertName.ToLower(),
                 NormalizedUserName = this.UsertName.ToUpper(),
                 Email = this.Email,
                 NormalizedEmail = this.Email.ToUpper(),

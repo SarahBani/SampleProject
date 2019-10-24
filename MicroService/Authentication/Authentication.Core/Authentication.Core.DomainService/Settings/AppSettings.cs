@@ -7,5 +7,8 @@
 
         public virtual string Issuer { get; set; }
 
+        public virtual string AccessExpiration { get; set; }
+        
+
     }
 }

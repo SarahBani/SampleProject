@@ -1,5 +1,4 @@
-﻿using Authentication.Core.ApplicationService;
-using Authentication.Core.ApplicationService.Contracts;
+﻿using Authentication.Core.ApplicationService.Contracts;
 using Authentication.WebAPIService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,7 @@ namespace Authentication.WebAPIService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
 
@@ -40,10 +40,31 @@ namespace Authentication.WebAPIService.Controllers
             return "value";
         }
 
-        // POST: api/Account/Register
+        // POST: api/Account/Login
+        [HttpPost]
+        [Route("Login")]
         [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await this._authService.Login(model.UsertName, model.Password);
+            if (result.IsSuccessful)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.ExceptionContentResult);
+            }
+        }
+
+        // POST: api/Account/Register
         [HttpPost]
         [Route("Register")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register([FromBody] RegistrationModel model)
         {
             if (!ModelState.IsValid)
@@ -64,6 +85,7 @@ namespace Authentication.WebAPIService.Controllers
         // PUT api/Account/ChangePassword
         [HttpPut]
         [Route("ChangePassword")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangePassword([FromBody] PasswordChangeModel model)
         {
             if (!ModelState.IsValid)

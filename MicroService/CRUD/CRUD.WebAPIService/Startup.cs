@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading.Tasks;
+using Core.DomainModel;
 using Core.DomainModel.Entities;
 using Core.DomainService.Settings;
 using DependencyInversion.Injector;
@@ -94,17 +96,13 @@ namespace MicroService.CRUDService
 
         private void ConfigureAuthService(IServiceCollection services)
         {
-            // prevent from mapping "sub" claim to nameidentifier.
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
-
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            // configure jwt authentication
+            var appSettingsSection = Configuration.GetSection(Constant.AppSetting_AppSettings);
             var appSettings = appSettingsSection.Get<APIAppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
 
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            // configure jwt authentication
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -118,45 +116,38 @@ namespace MicroService.CRUDService
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateAudience = true,
-                    ValidAudience = "crud",
+                    ValidAudience = appSettings.Audience,
                     ValidateIssuer = true,
                     ValidIssuer = appSettings.Issuer,
                 };
-                //options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
-                //options.Audience = appSettings.Issuer;
+                options.Audience = appSettings.Issuer;
+                options.SaveToken = true;
+                options.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = async ctx =>
+                    {
+                        int i = 0;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        System.Console.WriteLine("ddddddddddddddddddddddd");
+                        var identity = context.Principal.Identity;
+                        var user = context.Principal.Identity.Name;
+                        //Grab the http context user and validate the things you need to
+                        //if you are not satisfied with the validation, fail the request using the below commented code
+                        context.Fail("Unauthorized");
+
+                        //otherwise succeed the request
+                        return Task.CompletedTask;
+                    },
+                    OnMessageReceived = async ctx =>
+                    {
+                        int i = 0;
+                    }
+                };
             });
         }
-
-        //private void SetAuthorization(IServiceCollection services)
-        //{
-        //    // configure strongly typed settings objects
-        //    var appSettingsSection = Configuration.GetSection("AppSettings");
-        //    services.Configure<AuthenticationAppSettings>(appSettingsSection);
-
-        //    // configure jwt authentication
-        //    var appSettings = appSettingsSection.Get<AuthenticationAppSettings>();
-        //    var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
-        //    services.AddAuthentication(x =>
-        //    {
-        //        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    })
-        //    .AddJwtBearer(x =>
-        //    {
-        //        x.Authority = identityUrl;
-        //        x.RequireHttpsMetadata = false;
-        //        x.Audience = "crud";
-        //        x.SaveToken = true;
-        //        x.TokenValidationParameters = new TokenValidationParameters
-        //        {
-        //            ValidateIssuerSigningKey = true,
-        //            IssuerSigningKey = new SymmetricSecurityKey(key),
-        //            ValidateIssuer = false,
-        //            ValidateAudience = false
-        //        };
-        //    });
-        //}
 
         #endregion /Methods
 

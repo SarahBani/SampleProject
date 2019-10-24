@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -15,14 +16,16 @@ namespace Core.DomainModel.Entities
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Country> Countries { get; set; }
 
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         #endregion /Properties
 
         #region Constructors
 
-        public SampleDataBaseContext(DbContextOptions<SampleDataBaseContext> options)
+        public SampleDataBaseContext(DbContextOptions<SampleDataBaseContext> options, IHttpContextAccessor httpContextAccessor)
         : base(options)
         {
-
+            this._httpContextAccessor = httpContextAccessor;
         }
 
         #endregion /Constructors
