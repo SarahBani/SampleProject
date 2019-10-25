@@ -3,7 +3,7 @@ This is a sample project for the purpose of demonstration.
 I have worked on lots of enterprise projects for different companies which I cannot share the codes on the internet. 
 So, I decided to make a sample project with the following features: 
 
-• .NetCore 2.2
+• .Net Core 2.2
 
 • C#.NET 
 
@@ -17,13 +17,19 @@ So, I decided to make a sample project with the following features:
 
 • JSON Web Token (JWT) authentication 
 
+• Claims-based authorization
+
 • SQL Server 
 
-• Entity Framework (Code First)
+• Entity Framework (Code-First)
 
 • TDD 
 
+• NUnit
+
 • Unit Testing
+
+• Integration Testing
 
 I focus on the layers, tools and technologies. 
 The domain is totally simple and contains only simple tables. 
