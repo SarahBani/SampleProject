@@ -15,7 +15,7 @@ namespace Core.DomainModel.Migrations
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var dbContext = new SampleDataBaseContext(new DbContextOptions<SampleDataBaseContext>(), new HttpContextAccessor());
+                var dbContext = new SampleDataBaseContext(new DbContextOptions<SampleDataBaseContext>());
                 var userStore = new CustomUserStore(dbContext);
                 var userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
                 var user = userManager.FindByNameAsync("Sarah").Result;
@@ -23,7 +23,6 @@ namespace Core.DomainModel.Migrations
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, RoleEnum.Admin.ToString())
                 };
                 userManager.AddClaimsAsync(user, claims).Wait();
 

@@ -11,6 +11,7 @@
 
     public enum SubSystemEnum
     {
+        Auth,
         CRUD,
         CQRS
     }

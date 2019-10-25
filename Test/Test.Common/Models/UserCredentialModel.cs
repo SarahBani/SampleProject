@@ -10,7 +10,7 @@ namespace Test.Common.Models
             get => new UserCredential()
             {
                 Username = "User",
-                Password = "123"
+                Password = "Test@123"
             };
         }
 

@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Transactions;
 
 namespace Core.DomainModel.Migrations
 {
-    public partial class adddataintoUsertable : Migration
+    public partial class updateclaimsofadminuser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,24 +18,12 @@ namespace Core.DomainModel.Migrations
                 var dbContext = new SampleDataBaseContext(new DbContextOptions<SampleDataBaseContext>());
                 var userStore = new CustomUserStore(dbContext);
                 var userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
-                var user = new User
+                var user = userManager.FindByNameAsync("Sarah").Result;
+                var claims = new List<Claim>
                 {
-                    UserName = "Sarah",
-                    NormalizedUserName = "SARAH",
-                    Email = "Sarah_Bani@yahoo.com",
-                    NormalizedEmail = "SARAH_BANI@YAHOO.COM",
-                    PhoneNumber = "+111111111111",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString("D"),
-                    LockoutEnabled = true,
+                    new Claim(ClaimTypes.System,"auth;crud;cqrs"),
                 };
-                string password = "Test@123";
-                //var result = userManager.CreateAsync(user, password).Result;
-                var hashed = new PasswordHasher<User>().HashPassword(user, password);
-                user.PasswordHash = hashed;
-                var result = userStore.CreateAsync(user).Result;
-                userStore.AddToRoleAsync(user, RoleEnum.Admin.ToString()).Wait();
+                userManager.AddClaimsAsync(user, claims).Wait();
 
                 dbContext.SaveChanges();
                 scope.Complete();

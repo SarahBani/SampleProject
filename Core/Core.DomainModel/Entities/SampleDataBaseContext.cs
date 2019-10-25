@@ -16,16 +16,13 @@ namespace Core.DomainModel.Entities
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Country> Countries { get; set; }
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         #endregion /Properties
 
         #region Constructors
 
-        public SampleDataBaseContext(DbContextOptions<SampleDataBaseContext> options, IHttpContextAccessor httpContextAccessor)
+        public SampleDataBaseContext(DbContextOptions<SampleDataBaseContext> options)
         : base(options)
         {
-            this._httpContextAccessor = httpContextAccessor;
         }
 
         #endregion /Constructors

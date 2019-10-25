@@ -28,8 +28,6 @@ namespace Authentication.Core.ApplicationService.Implementation
 
         private readonly UserManager<User> _userManager;
 
-        private readonly RoleManager<Role> _roleManager;
-
         private readonly IHttpContextAccessor _httpContextAccessor;
 
 
@@ -39,14 +37,12 @@ namespace Authentication.Core.ApplicationService.Implementation
 
         public AuthService(IOptions<AppSettings> appSettings,
             UserManager<User> userManager,
-            RoleManager<Role> roleManager,
             IHttpContextAccessor httpContextAccessor,
             IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             this._appSettings = appSettings.Value;
             this._userManager = userManager;
-            this._roleManager = roleManager;
             this._httpContextAccessor = httpContextAccessor;
         }
 
@@ -122,8 +118,10 @@ namespace Authentication.Core.ApplicationService.Implementation
             switch (role)
             {
                 case RoleEnum.Admin:
+                    subSystems = string.Join(";", SubSystemEnum.Auth.ToString().ToLower(), SubSystemEnum.CRUD.ToString().ToLower(), SubSystemEnum.CQRS.ToString().ToLower());
+                    break;
                 case RoleEnum.Manager:
-                    subSystems = string.Join(";", SubSystemEnum.CRUD.ToString(), SubSystemEnum.CQRS.ToString());
+                    subSystems = string.Join(";", SubSystemEnum.CRUD.ToString().ToLower(), SubSystemEnum.CQRS.ToString().ToLower());
                     break;
                 case RoleEnum.Employee:
                 case RoleEnum.Member:
@@ -189,25 +187,25 @@ namespace Authentication.Core.ApplicationService.Implementation
             return new TransactionResult(new CustomException(Constant.Exception_ChangePasswordFailed));
         }
 
-        public async Task<TransactionResult> CreateRole(string name)
-        {
-            var role = new Role()
-            {
-                Name = name,
-                NormalizedName = name.ToUpper(),
-                ConcurrencyStamp = Guid.NewGuid().ToString(),
-                Description = null
-            };
-            var result = await this._roleManager.CreateAsync(role);
-            if (result.Succeeded)
-            {
-                return new TransactionResult();
-            }
-            else
-            {
-                return new TransactionResult(new CustomException(Constant.Exception_RoleCreationFailed));
-            }
-        }
+        //public async Task<TransactionResult> CreateRole(string name)
+        //{
+        //    var role = new Role()
+        //    {
+        //        Name = name,
+        //        NormalizedName = name.ToUpper(),
+        //        ConcurrencyStamp = Guid.NewGuid().ToString(),
+        //        Description = null
+        //    };
+        //    var result = await this._roleManager.CreateAsync(role);
+        //    if (result.Succeeded)
+        //    {
+        //        return new TransactionResult();
+        //    }
+        //    else
+        //    {
+        //        return new TransactionResult(new CustomException(Constant.Exception_RoleCreationFailed));
+        //    }
+        //}
 
         public async Task<bool> IsAuthenticated(UserCredential userCredential)
         {

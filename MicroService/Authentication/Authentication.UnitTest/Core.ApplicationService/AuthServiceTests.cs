@@ -1,6 +1,8 @@
 ﻿using Authentication.Core.ApplicationService.Implementation;
+using Authentication.Core.DomainService;
 using Authentication.Core.DomainService.Settings;
 using Core.DomainModel.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +30,6 @@ namespace Authentication.UnitTest.Core.ApplicationService
 
         public AuthServiceTests()
         {
-            //this._service = new AuthService();
         }
 
         #endregion /Constructors
@@ -43,11 +44,13 @@ namespace Authentication.UnitTest.Core.ApplicationService
 
             var options = new DbContextOptions<SampleDataBaseContext>();
             var dbContextMock = new Mock<SampleDataBaseContext>(options);
-            var userStore = new UserStore<IdentityUser>(dbContextMock.Object);
-            var userManager = new UserManager<IdentityUser>(userStore, null, null, null, null, null, null, null, null);
-            var roleStore = new RoleStore<IdentityRole>(dbContextMock.Object);
-            var roleManager = new RoleManager<IdentityRole>(roleStore, null, null, null, null);
-            //this._service = new AuthenticationService(this._appSettingsMock.Object, userManager, roleManager);
+            var userStore = new CustomUserStore(dbContextMock.Object);
+            var userManager = new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new HttpContextAccessor();
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(q => q.BeginTransactionAsync(It.IsAny<string>()))
+                .Callback<string>(q => unitOfWorkMock.Setup(x => x.GetTransactionName()).Returns(q));
+            this._service = new AuthService(this._appSettingsMock.Object, userManager, httpContextAccessor, unitOfWorkMock.Object);
         }
 
         [Test]
