@@ -66,14 +66,14 @@ namespace CRUD.UnitTest.WebAPIService
         {
             // Arrange
             var banks = this.EntityList;
-            this._bankServiceMock.Setup(q => q.GetAllAsync()).ReturnsAsync(banks);
+            this._bankServiceMock.Setup(q => q.GetAll()).Returns(banks);
             var expectedValue = new OkObjectResult(banks);
 
             //Act
             var result = await this._controller.GetAsync();
 
             // Assert
-            this._bankServiceMock.Verify(q => q.GetAllAsync(),
+            this._bankServiceMock.Verify(q => q.GetAll(),
                 "error in calling the correct method");  // Verifies that bankService.GetAllAsync was called
             Assert.IsInstanceOf<OkObjectResult>(result, "error in returning correct response");
             TestHelper.AreEqualEntities(expectedValue, result, "error in returning correct entities");
@@ -85,14 +85,14 @@ namespace CRUD.UnitTest.WebAPIService
             // Arrange
             var bank = this.Entity;
             int id = bank.Id;
-            this._bankServiceMock.Setup(q => q.GetByIdAsync(id)).ReturnsAsync(bank);
+            this._bankServiceMock.Setup(q => q.GetByIdAsync(id, default)).ReturnsAsync(bank);
             var expectedValue = new OkObjectResult(bank);
 
             //Act
             var result = await this._controller.GetAsync(id);
 
             // Assert
-            this._bankServiceMock.Verify(q => q.GetByIdAsync(id),
+            this._bankServiceMock.Verify(q => q.GetByIdAsync(id, default),
                 "error in calling the correct method");  // Verifies that bankService.GetByIdAsync was called
             Assert.IsInstanceOf<OkObjectResult>(result, "error in returning correct response");
             TestHelper.AreEqualEntities(expectedValue, result, "error in returning correct entity");
@@ -104,14 +104,14 @@ namespace CRUD.UnitTest.WebAPIService
             // Arrange
             int id = 0;
             Bank bank = null;
-            this._bankServiceMock.Setup(q => q.GetByIdAsync(id)).ReturnsAsync(bank);
+            this._bankServiceMock.Setup(q => q.GetByIdAsync(id, default)).ReturnsAsync(bank);
             var expectedValue = new OkObjectResult(bank);
 
             //Act
             var result = await this._controller.GetAsync(id);
 
             // Assert
-            this._bankServiceMock.Verify(q => q.GetByIdAsync(id),
+            this._bankServiceMock.Verify(q => q.GetByIdAsync(id, default),
                 "error in calling the correct method");  // Verifies that bankService.GetByIdAsync was called
             Assert.IsInstanceOf<OkObjectResult>(result, "error in returning correct response");
             TestHelper.AreEqualEntities(expectedValue, result, "error in returning correct entity");

@@ -64,14 +64,14 @@ namespace Test.UnitTest.Core.ApplicationService
         {
             // Arrange
             var entity = this.Entity;
-            this.RepositoryMock.Setup(q => q.GetByIdAsync(entity.Id)).ReturnsAsync(entity);
+            this.RepositoryMock.Setup(q => q.GetByIdAsync(entity.Id, default)).ReturnsAsync(entity);
 
             //Act
-            var result =await this.Service.GetByIdAsync(entity.Id);
+            var result = await this.Service.GetByIdAsync(entity.Id);
 
             // Assert
             Assert.IsInstanceOf<TEntity>(result);
-            this.RepositoryMock.Verify(q => q.GetByIdAsync(It.IsAny<TKey>()),
+            this.RepositoryMock.Verify(q => q.GetByIdAsync(It.IsAny<TKey>(), default),
                 "error in calling the correct method");  // Verifies that Repository.GetByIdAsync was called
             Assert.AreEqual(entity, result, "error in returning correct entity");
         }
@@ -82,59 +82,59 @@ namespace Test.UnitTest.Core.ApplicationService
             // Arrange
             TEntity entity = null;
             TKey id = TestHelper.GetId<TKey>(0);
-            this.RepositoryMock.Setup(q => q.GetByIdAsync(id)).ReturnsAsync(entity);
+            this.RepositoryMock.Setup(q => q.GetByIdAsync(id, default)).ReturnsAsync(entity);
 
             //Act
-            var result =await this.Service.GetByIdAsync(id);
+            var result = await this.Service.GetByIdAsync(id);
 
             // Assert
-            this.RepositoryMock.Verify(q => q.GetByIdAsync(id),
+            this.RepositoryMock.Verify(q => q.GetByIdAsync(id, default),
                 "error in calling the correct method");  // Verifies that Repository.GetByIdAsync was called
             Assert.IsNull(result, "error in returning null entity");
         }
 
         #endregion /GetByIdAsync
 
-        #region GetCountAsync
+        #region GetCount
 
         [Test]
-        public async Task GetCountAsync_ReturnsOK()
+        public void GetCount_ReturnsOK()
         {
             // Arrange
             int count = 3;
-            this.RepositoryMock.Setup(q => q.GetCountAsync(null)).ReturnsAsync(count);
+            this.RepositoryMock.Setup(q => q.GetCount(null)).Returns(count);
 
             //Act
-            var result =await this.Service.GetCountAsync();
+            var result = this.Service.GetCount();
 
             // Assert
-            this.RepositoryMock.Verify(q => q.GetCountAsync(null),
+            this.RepositoryMock.Verify(q => q.GetCount(null),
                 "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
-        #endregion /GetCountAsync
+        #endregion /GetCount
 
-        #region GetAllAsync
+        #region GetAll
 
         [Test]
-        public async Task GetAllAsync_ReturnsOK()
+        public void GetAll_ReturnsOK()
         {
             // Arrange
             var entityList = this.EntityList;
-            this.RepositoryMock.Setup(q => q.GetQueryableAsync()).ReturnsAsync(entityList.AsQueryable());
+            this.RepositoryMock.Setup(q => q.GetQueryable()).Returns(entityList.AsQueryable());
 
             //Act
-            var result =await this.Service.GetAllAsync();
+            var result = this.Service.GetAll();
 
             // Assert            
             Assert.IsInstanceOf<IList<TEntity>>(result);
-            this.RepositoryMock.Verify(q => q.GetQueryableAsync(),
+            this.RepositoryMock.Verify(q => q.GetQueryable(),
                 "error in calling the correct method");  // Verifies that Repository.GetQueryableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }
 
-        #endregion /GetAllAsync
+        #endregion /GetAll
 
         #endregion /Methods
 

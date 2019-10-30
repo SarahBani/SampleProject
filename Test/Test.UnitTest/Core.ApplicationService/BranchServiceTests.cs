@@ -6,7 +6,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Test.Common.Models;
 
 namespace Test.UnitTest.Core.ApplicationService
@@ -52,71 +51,71 @@ namespace Test.UnitTest.Core.ApplicationService
         }
 
         [Test]
-        public async Task GetCountByBankIdAsync_ReturnsOK()
+        public void GetCountByBankId_ReturnsOK()
         {
             // Arrange
             int count = 3;
             int bankId = 5;
-            base.RepositoryMock.Setup(x => x.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())).ReturnsAsync(count);
+            base.RepositoryMock.Setup(x => x.GetCount(It.IsAny<Expression<Func<Branch, bool>>>())).Returns(count);
 
             //Act
-            var result = await this.Service.GetCountByBankIdAsync(bankId);
+            var result = this.Service.GetCountByBankId(bankId);
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>()), 
+            base.RepositoryMock.Verify(q => q.GetCount(It.IsAny<Expression<Func<Branch, bool>>>()),
                 "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
         [Test]
-        public async Task GetCountByBankIdAsync_BankIdIsInvalid_ReturnsZero()
+        public void GetCountByBankId_BankIdIsInvalid_ReturnsZero()
         {
             // Arrange
             int count = 0;
             int bankId = -1;
-            base.RepositoryMock.Setup(x => x.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>())).ReturnsAsync(count);
+            base.RepositoryMock.Setup(x => x.GetCount(It.IsAny<Expression<Func<Branch, bool>>>())).Returns(count);
 
             //Act
-            var result = await this.Service.GetCountByBankIdAsync(bankId);
+            var result = this.Service.GetCountByBankId(bankId);
 
             // comparing expressions
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetCountAsync(It.IsAny<Expression<Func<Branch, bool>>>()),
+            base.RepositoryMock.Verify(q => q.GetCount(It.IsAny<Expression<Func<Branch, bool>>>()),
                 "error in calling the correct method");  // Verifies that Repository.GetCountAsync was called
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
-        public async Task GetListByBankIdAsync_ReturnsOK()
+        public void GetListByBankId_ReturnsOK()
         {
             // Arrange
             var entityList = this.EntityList;
             int bankId = 5;
-            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
-                .ReturnsAsync(entityList);
+            base.RepositoryMock.Setup(q => q.GetEnumerable(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
+                .Returns(entityList);
 
             //Act
-            var result = await this.Service.GetListByBankIdAsync(bankId);
+            var result = this.Service.GetListByBankId(bankId);
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null),
+            base.RepositoryMock.Verify(q => q.GetEnumerable(It.IsAny<Expression<Func<Branch, bool>>>(), null, null),
                 "error in calling the correct method");  // Verifies that Repository.GetEnumerableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }
 
-        public async Task GetListByBankIdAsync_BankIdIsInvalid_ReturnsNoItem()
+        public void GetListByBankId_BankIdIsInvalid_ReturnsNoItem()
         {
             // Arrange
             var entityList = new List<Branch>();
             int bankId = -1;
-            base.RepositoryMock.Setup(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
-                .ReturnsAsync(entityList);
+            base.RepositoryMock.Setup(q => q.GetEnumerable(It.IsAny<Expression<Func<Branch, bool>>>(), null, null))
+                .Returns(entityList);
 
             //Act
-            var result = await this.Service.GetListByBankIdAsync(bankId);
+            var result = this.Service.GetListByBankId(bankId);
 
             // Assert
-            base.RepositoryMock.Verify(q => q.GetEnumerableAsync(It.IsAny<Expression<Func<Branch, bool>>>(), null, null),
+            base.RepositoryMock.Verify(q => q.GetEnumerable(It.IsAny<Expression<Func<Branch, bool>>>(), null, null),
                 "error in calling the correct method");  // Verifies that Repository.GetEnumerableAsync was called
             Assert.AreEqual(entityList, result, "error in returning correct entities");
         }

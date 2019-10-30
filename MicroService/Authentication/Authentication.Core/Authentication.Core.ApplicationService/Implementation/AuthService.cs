@@ -227,7 +227,7 @@ namespace Authentication.Core.ApplicationService.Implementation
                 {
                     throw new CustomException(ExceptionKey.UserNotAccess);
                 }
-                var subSystems = claims.SingleOrDefault(q => q.ValueType == ClaimTypes.System);
+                var subSystems = claims.SingleOrDefault(q => q.Type == ClaimTypes.System);
                 if (subSystems == null)
                 {
                     throw new CustomException(ExceptionKey.UserNotAccess);
@@ -251,7 +251,7 @@ namespace Authentication.Core.ApplicationService.Implementation
                 };
                 string token = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
 
-                return CommitTransaction(token);
+                return new TransactionResult(token);
             }
             catch (Exception ex)
             {

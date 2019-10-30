@@ -34,14 +34,14 @@ namespace Test.UnitTest.Infrastructure.DataBase
         #region Methods  
 
         [Test]
-        public async Task Insert_ReturnsOK()
+        public void Insert_ReturnsOK()
         {
             // Arrange
             var entity = this.Entity;
             base.DataBaseContextMock.Setup(q => q.Add(It.IsAny<TEntity>())).Verifiable();
 
             //Act
-            await Task.Run(() => this.Repository.Insert(entity));
+            this.Repository.Insert(entity);
 
             // Assert
             this.DataBaseContextMock.Verify(q => q.Add(It.IsAny<TEntity>()), "error in calling the correct method");

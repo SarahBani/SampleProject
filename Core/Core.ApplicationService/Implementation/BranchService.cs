@@ -26,20 +26,19 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        public Task<int> GetCountByBankIdAsync(int bankId)
+        public int GetCountByBankId(int bankId)
         {
-            return base.GetCountAsync(q => q.BankId.Equals(bankId));
+            return base.GetCount(q => q.BankId.Equals(bankId));
         }
 
-        public async Task<IList<Branch>> GetListByBankIdAsync(int bankId)
+        public IList<Branch> GetListByBankId(int bankId)
         {
-            return await Task.Run(() => base.GetEnumerableAsync(q => q.BankId.Equals(bankId))
-                .Result.ToList());
+            return  base.GetEnumerable(q => q.BankId.Equals(bankId)).ToList();
         }
 
         public async Task<TransactionResult> DeleteByBankIdAsync(int bankId)
         {
-            foreach (var bank in GetListByBankIdAsync(bankId).Result)
+            foreach (var bank in GetListByBankId(bankId))
             {
                 await base.DeleteAsync(bank);
             }

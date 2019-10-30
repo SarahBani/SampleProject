@@ -170,23 +170,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
             Assert.AreEqual(count, result, "error in returning correct entity count");
         }
 
-        [Test]
-        public async Task GetCountAsync_ReturnsOK()
-        {
-            // Arrange
-            int count = this.EntityList.Count();
-            var dbSetMock = GetDbSetMock();
-            this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => true;
-
-            //Act
-            var result = await this.Repository.GetCountAsync(filter);
-
-            // Assert
-            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
-            Assert.AreEqual(count, result, "error in returning correct entity count");
-        }
-
         #endregion /GetCount
 
         #region GetSingle
@@ -226,41 +209,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
             TestHelper.AreEqualEntities(entity, result, "error in returning correct entity");
         }
 
-        [Test]
-        public async Task GetSingleAsync_ReturnsOK()
-        {
-            // Arrange
-            TKey id = TestHelper.GetId<TKey>(3);
-            var entity = this.EntityList.Single(q => q.Id.Equals(id));
-            var dbSetMock = GetDbSetMock();
-            this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(id);
-
-            //Act
-            var result = await this.Repository.GetSingleAsync(filter);
-
-            // Assert
-            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
-            TestHelper.AreEqualEntities(entity, result, "error in returning correct entity");
-        }
-
-        [Test]
-        public async Task GetSingleAsync_IdIsInvalid_ReturnsNull()
-        {
-            // Arrange
-            TEntity entity = null;
-            var dbSetMock = GetDbSetMock();
-            this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => q.Id.Equals(-1);
-
-            //Act
-            var result = await this.Repository.GetSingleAsync(filter);
-
-            // Assert
-            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
-            Assert.AreEqual(entity, result, "error in returning correct entity");
-        }
-
         #endregion /GetSingle
 
         #region GetQueryable
@@ -275,23 +223,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
             //Act
             var result = await Task.Run(() => this.Repository.GetQueryable());
-
-            // Assert            
-            Assert.IsInstanceOf<IQueryable<TEntity>>(result);
-            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
-            TestHelper.AreEqualEntities(entityList, result, "error in returning correct entities");
-        }
-
-        [Test]
-        public async Task GetQueryableAsync_ReturnsOK()
-        {
-            // Arrange
-            var entityList = EntityList.AsQueryable();
-            var dbSetMock = GetDbSetMock();
-            this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-
-            //Act
-            var result = await this.Repository.GetQueryableAsync();
 
             // Assert            
             Assert.IsInstanceOf<IQueryable<TEntity>>(result);
@@ -316,26 +247,6 @@ namespace Test.UnitTest.Infrastructure.DataBase
 
             //Act
             var result = await Task.Run(() => this.Repository.GetEnumerable(filter, sorts, page));
-
-            // Assert            
-            Assert.IsInstanceOf<IEnumerable<TEntity>>(result);
-            this.DataBaseContextMock.Verify(q => q.Set<TEntity>(), "error in calling the correct method");
-            TestHelper.AreEqualEntities(entityList, result, "error in returning correct entities");
-        }
-
-        [Test]
-        public async Task GetEnumerableAsync_ReturnsOK()
-        {
-            // Arrange
-            var entityList = EntityList.OrderByDescending(q => q.Id).Skip(0).Take(5).AsEnumerable();
-            var dbSetMock = GetDbSetMock();
-            this.DataBaseContextMock.Setup(q => q.Set<TEntity>()).Returns(dbSetMock.Object);
-            Expression<Func<TEntity, bool>> filter = q => true;
-            IList<Sort> sorts = new List<Sort>() { new Sort("Id", SortDirection.DESC) };
-            Page page = new Page(1, 5);
-
-            //Act
-            var result = await this.Repository.GetEnumerableAsync(filter, sorts, page);
 
             // Assert            
             Assert.IsInstanceOf<IEnumerable<TEntity>>(result);

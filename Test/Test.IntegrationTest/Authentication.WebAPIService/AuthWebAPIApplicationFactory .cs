@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Authentication.WebAPIService;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using APIManager.WebAPIGateway;
-using System.Transactions;
 
-namespace Test.IntegrationTest.APIManager.WebAPIGateway
+namespace Test.IntegrationTest
 {
-    public class APIWebApplicationFactory : WebApplicationFactory<Startup>
+    public class AuthWebAPIApplicationFactory : WebApplicationFactory<Startup>
     {
 
         #region Methods

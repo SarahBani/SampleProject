@@ -23,9 +23,9 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        public async Task<int> GetCountAsync()
+        public int GetCount()
         {
-            return await base.GetCountAsync();
+            return base.GetCount();
         }
 
         #endregion /Methods

@@ -30,9 +30,9 @@ namespace Infrastructure.DataBase.Repository
             base.MyDBContext.Add(entity);
         }
 
-        public virtual async Task InsertAsync(TEntity entity)
+        public virtual Task InsertAsync(TEntity entity)
         {
-            await base.MyDBContext.AddAsync(entity);
+            return base.MyDBContext.AddAsync(entity);
         }
 
         public virtual void Update(TEntity entity)

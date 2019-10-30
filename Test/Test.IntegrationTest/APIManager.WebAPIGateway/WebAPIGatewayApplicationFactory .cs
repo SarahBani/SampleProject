@@ -4,7 +4,7 @@ using APIManager.WebAPIGateway;
 
 namespace Test.IntegrationTest
 {
-    public class APIWebApplicationFactory : WebApplicationFactory<Startup>
+    public class WebAPIGatewayApplicationFactory : WebApplicationFactory<Startup>
     {
 
         #region Methods

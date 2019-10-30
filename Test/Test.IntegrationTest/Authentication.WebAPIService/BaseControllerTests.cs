@@ -6,14 +6,14 @@ using System.Text;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Test.IntegrationTest.APIManager.WebAPIGateway
+namespace Test.IntegrationTest.Authentication.WebAPIService
 {  
     public abstract class BaseControllerTests
     {
 
         #region Properties
 
-        protected WebAPIGatewayApplicationFactory Factory;
+        protected AuthWebAPIApplicationFactory Factory;
 
         protected HttpClient Client;
 
@@ -24,7 +24,7 @@ namespace Test.IntegrationTest.APIManager.WebAPIGateway
         public BaseControllerTests()
             : base()
         {
-            this.Factory = new WebAPIGatewayApplicationFactory();
+            this.Factory = new AuthWebAPIApplicationFactory();
             this.Client = this.Factory.CreateClient();
         }
 

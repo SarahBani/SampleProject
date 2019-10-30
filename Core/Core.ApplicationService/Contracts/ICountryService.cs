@@ -1,5 +1,6 @@
 ﻿using Core.DomainModel.Entities;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Contracts
@@ -7,9 +8,9 @@ namespace Core.ApplicationService.Contracts
     public interface ICountryService
     {
 
-        Task<Country> GetByIdAsync(short id);
+        Task<Country> GetByIdAsync(short id, CancellationToken cancellationToken = default);
 
-        Task<IList<Country>> GetAllAsync();
+        IList<Country> GetAll();
 
     }
 }

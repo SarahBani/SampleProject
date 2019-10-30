@@ -35,7 +35,7 @@ namespace MicroService.CRUDService
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
-            var banks = await this._bankService.GetAllAsync();
+            var banks = this._bankService.GetAll();
             return new OkObjectResult(banks);
         }
 

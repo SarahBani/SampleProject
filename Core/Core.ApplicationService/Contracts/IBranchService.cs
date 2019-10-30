@@ -1,6 +1,7 @@
 ﻿using Core.DomainModel.Entities;
 using Core.DomainService;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.ApplicationService.Contracts
@@ -8,11 +9,11 @@ namespace Core.ApplicationService.Contracts
     public interface IBranchService
     {
 
-        Task<Branch> GetByIdAsync(int id);
+        Task<Branch> GetByIdAsync(int id, CancellationToken cancellationToken = default);
 
-        Task<int> GetCountByBankIdAsync(int bankId);
+        int GetCountByBankId(int bankId);
 
-        Task<IList<Branch>> GetListByBankIdAsync(int bankId);
+        IList<Branch> GetListByBankId(int bankId);
         
         Task<TransactionResult> InsertAsync(Branch branch);
 
