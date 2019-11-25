@@ -39,6 +39,8 @@ namespace MicroService.CRUDService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache(); 
+
             if (!this.Configuration["Environment"].Equals("IntegrationTest"))
             {
                 string connectionString = Core.DomainService.Utility.GetConnectionString(this.Configuration);
@@ -131,7 +133,7 @@ namespace MicroService.CRUDService
                     },
                     OnTokenValidated = context =>
                     {
-                        System.Console.WriteLine("ddddddddddddddddddddddd");
+                        System.Console.WriteLine("OnTokenValidated");
                         var identity = context.Principal.Identity;
                         var user = context.Principal.Identity.Name;
                         //Grab the http context user and validate the things you need to

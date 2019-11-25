@@ -117,5 +117,10 @@ namespace Core.DomainService
             return content;
         }
 
+        public static string GetPascalCase(string text)
+        {
+            return text.Substring(0, 1).ToUpper() + text.Substring(1);
+        }
+
     }
 }

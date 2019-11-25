@@ -24,7 +24,7 @@ namespace DependencyInversion.Injector
             services.AddScoped<ICountryService, CountryService>();
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBranchService, BranchService>();
-
+            
             // Can't do this for abstract classes
             //services.AddScoped(typeof(IReadOnlyRepository<,>), typeof(ReadOnlyRepository<,>));
             //services.AddScoped(typeof(IBaseService), typeof(BaseService<,>));

@@ -16,4 +16,11 @@
         CQRS
     }
 
+    public enum CachingDuration
+    {
+        Hour,
+        Day,
+        Week
+    }
+
 }

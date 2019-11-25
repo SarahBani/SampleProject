@@ -1,5 +1,7 @@
-﻿using Core.DomainModel.Entities;
+﻿using Core.DomainModel;
+using Core.DomainModel.Entities;
 using Core.DomainService;
+using Core.DomainService.Caching;
 using Core.DomainService.Repository;
 using System;
 using System.Collections.Generic;
@@ -55,6 +57,7 @@ namespace Core.ApplicationService.Implementation
             return this.Repository.GetSingle(filter);
         }
 
+        [Cache(Duration = CachingDuration.Day)]
         public virtual IList<TEntity> GetAll()
         {
             return this.GetQueryable().ToList();
